@@ -54,7 +54,7 @@ BMPImage* loadBmp(const char* path) {
         return NULL;
     }
 
-    BMPImage * bmpImage = malloc(sizeof(BMPImage)); 
+    BMPImage * bmpImage = (BMPImage *) malloc(sizeof(BMPImage)); 
 
     uint8_t* data = map+bmpHeader->data_offset;
     bmpImage->data = data; 

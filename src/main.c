@@ -1,11 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/bmp.h"
+#include "../include/polynomial.h"
 
 
-int main(int argc, char *argv[]) {
-    BMPImage* bmp = loadBmp(argv[argc-1]);
+void tryBmp(char * path) {
+    BMPImage* bmp = loadBmp(path);
     dumpBmpInverted(bmp); 
     freeBmp(bmp); 
-    return 0;
+}
+
+void tryPolynomial() {
+    printf("\nBeginning test poly\n"); 
+
+    // Create polynomial from coefficients
+    Polynomial * poly = polyFromCoefficients(3, 1, 1, 1); 
+
+    // Print polynomial
+    polyPrint(poly); 
+
+    // Evaluate the polyomial on sample value
+    int x = 200; 
+    int t = polyEvaluate(poly, x); 
+    printf("p(%d)=%d\n", x, t);
+}
+
+int main() {
+    tryPolynomial(); 
 }
