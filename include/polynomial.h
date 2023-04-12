@@ -20,7 +20,10 @@ uint8_t polyEvaluate(Polynomial* poly, unsigned int x);
 void polyPrint(Polynomial* poly); 
 
 /* Interpolates n given values into a n-1 degree polynomial*/
-Polynomial* polyInterpolate(unsigned int n, ...); 
+Polynomial* polyInterpolate(unsigned int n, ...);
+
+/* Frees the resources used by a Polynomial instance */
+void polyFree(Polynomial * poly); 
 
 
 #endif // POLYNOMIAL_H

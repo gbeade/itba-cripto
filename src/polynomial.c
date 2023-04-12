@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MOD 251
-
 Polynomial* polyFromCoefficients(unsigned int n, ...) {
     va_list args;
     va_start(args, n);
@@ -44,4 +42,9 @@ void polyPrint(Polynomial* poly) {
         printf(" + %dx^%d", poly->coefficients[i], i);
     
     printf("\n");
+}
+
+void polyFree(Polynomial* poly) {
+    free(poly->coefficients);
+    free(poly);
 }

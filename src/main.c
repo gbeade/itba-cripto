@@ -23,6 +23,8 @@ void tryPolynomial() {
     int x = 200; 
     int t = polyEvaluate(poly, x); 
     printf("p(%d)=%d\n", x, t);
+
+    polyFree(poly); 
 }
 
 int main() {
