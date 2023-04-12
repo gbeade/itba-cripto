@@ -1,0 +1,26 @@
+# Object files
+*.o
+
+# Compiled binaries
+bin/
+
+# Visual Studio Code
+.vscode/
+
+# CMake build directory
+CMakeFiles/
+
+# CMake cache files
+CMakeCache.txt
+CMakeCache/
+
+# Editor files
+*.swp
+*~
+
+# macOS specific files
+.DS_Store
+
+# Windows specific files
+Thumbs.db
+
