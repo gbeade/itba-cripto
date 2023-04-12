@@ -28,5 +28,9 @@ void tryPolynomial() {
 }
 
 int main() {
-    tryPolynomial(); 
+    printf("Multiplicative inverses in modulo %d->%d\n", 20, INV(20));
+    printf("Multiplicative inverses in modulo %d->%d\n", -20, INV(-20));
+
+
+    return 0;
 }
