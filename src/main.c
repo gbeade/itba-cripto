@@ -47,6 +47,7 @@ void tryLagrange() {
         printf("p(%d)=%d\n", xs[i], t);
     }
 
+
     polyFree(poly); 
 }
 
