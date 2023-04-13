@@ -92,5 +92,7 @@ Polynomial* polyInterpolate(int n, int* xs, int* ys) {
     }
 
 
+    polyPrint(poly); 
+
     return poly; 
 }

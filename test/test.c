@@ -12,6 +12,7 @@ CuSuite * getPolynomialSuiteTest(void) {
 	SUITE_ADD_TEST(suite, testCreateModuloPolynomial);
 	SUITE_ADD_TEST(suite, testCreateNonpositiveDegreePolynomial);
 	SUITE_ADD_TEST(suite, testPolynomialEvaluation);
+	SUITE_ADD_TEST(suite, testPolynomialInterpolation);
 
 	return suite;
 }

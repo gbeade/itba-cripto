@@ -53,6 +53,6 @@ void tryLagrange() {
 
 
 int main() {
-    tryPolynomial(); 
+    tryLagrange(); 
     return 0;
 }

@@ -116,3 +116,21 @@ void testPolynomialEvaluation(CuTest *const cuTest) {
 }
 
 
+static void testQuadraticInterpolation(CuTest *const cuTest, int s1, int s2, int s3, int x1, int x2, int x3, int y1, int y2, int y3) {
+    int xs[3] = {x1, x2, x3}; 
+    int ys[3] = {y1, y2, y3}; 
+    Polynomial * poly1 = polyInterpolate(3, xs, ys); 
+
+    CuAssertIntEquals(cuTest, poly1->coefficients[0], s1);
+    CuAssertIntEquals(cuTest, poly1->coefficients[1], s2);
+    CuAssertIntEquals(cuTest, poly1->coefficients[2], s3);
+
+    polyFree(poly1); 
+}
+
+
+void testPolynomialInterpolation(CuTest *const cuTest) {
+    testQuadraticInterpolation(cuTest, 0, 1, 0, 1, 2, 3, 1, 2, 3); 
+    testQuadraticInterpolation(cuTest, 1, 1, 1, 1, 2, 3, 3, 7, 15); 
+}
+
