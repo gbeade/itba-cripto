@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 #define MOD 251
-#define INV(x) ( (x) < 0 ? inverses[(x*(-1)*(MOD-1))%MOD-1] : inverses[(x)-1] )
+#define CONG(x) ( (x) < 0 ? ((x*(-1)*(MOD-1))%MOD) : (x%MOD))  // Write a number as a positive residue in MOD congruency
+#define INV(x) ( inverses[CONG(x)-1] )   // Recover the multiplicative inverse in MOD congruency
+
 
 static const uint8_t inverses[MOD] = {
     1, 126, 84, 63, 201, 42, 36, 157, 28, 226, 137, 21, 58, 18, 67, 204,
@@ -39,7 +41,7 @@ uint8_t polyEvaluate(Polynomial* poly, unsigned int x);
 void polyPrint(Polynomial* poly); 
 
 /* Interpolates n given values into a n-1 degree polynomial*/
-Polynomial* polyInterpolate(unsigned int n, ...);
+Polynomial* polyInterpolate(int n, int* xs, int* ys);
 
 /* Frees the resources used by a Polynomial instance */
 void polyFree(Polynomial * poly); 

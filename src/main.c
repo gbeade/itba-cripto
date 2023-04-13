@@ -27,10 +27,32 @@ void tryPolynomial() {
     polyFree(poly); 
 }
 
+#define N 3
+void tryLagrange() {
+    printf("\nBeginning test lagrange\n"); 
+
+    
+    int xs[N] = {1, 2, 3}; 
+    int ys[N] = {1, 2, 3}; 
+
+
+    // Create polynomial from coefficients
+    Polynomial * poly = polyInterpolate(N, xs, ys); 
+
+    // Print polynomial
+    polyPrint(poly); 
+
+    for (int i = 0; i<N; i++) {
+        int t = polyEvaluate(poly, xs[i]); 
+        printf("p(%d)=%d\n", xs[i], t);
+    }
+
+
+    // polyFree(poly); 
+}
+
+
 int main() {
-    printf("Multiplicative inverses in modulo %d->%d\n", 20, INV(20));
-    printf("Multiplicative inverses in modulo %d->%d\n", -20, INV(-20));
-
-
+    tryLagrange(); 
     return 0;
 }
