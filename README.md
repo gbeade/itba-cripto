@@ -16,3 +16,5 @@ Para compilar y ejecutar el programa:
 3. Compilar el proyecto: `make all`
 4. Ejecutar el programa: ./bin/main
 
+# Testing
+Para correr los tests, es suficiente con correr la regla `make test`. Esto compila los fuentes, la librería de testeo CuTest y corre todos los tests según lo establecido en `test/test.c`. 
