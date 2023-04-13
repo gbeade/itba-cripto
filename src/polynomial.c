@@ -55,27 +55,13 @@ Polynomial* polyInterpolate(int n, int* xs, int* ys) {
     poly->degree = n - 1;
     poly->coefficients = (uint8_t*) malloc(n * sizeof(uint8_t));
 
-    printf("We will analyze the following points: "); 
-    for (int i=0; i<n; i++)
-        printf("(%d, %d)\n", xs[i], ys[i]); 
-    putchar('\n');
-
-
     int qc = 0; // Number of coefficients already analysed
     int yPrimes[n];  // y' cache - the y' are constructed recursively as interpolation progresses
     while (qc < n) {
         int currentCoefficient = 0;
-        printf("\n\nLOOKING FOR NEW COEFFICIENT...\n");
 
-        // Reduced Lagrange algoritm. In each iteration we ignore one extra point
+        // Reduced Lagrange algorithm. In each iteration we ignore one extra point
         int top = n-qc;
-        printf("We will analyze the following points: "); 
-        for (int i=0; i<top; i++) {
-            printf("(%d, %d) ", xs[i], ys[i]); 
-        }  
-        putchar('\n');
-
-
         for (int i = 0; i<top; i++) {
 
             // Now we are standing on a particular (xs[i], ys[i]) point
@@ -85,23 +71,17 @@ Polynomial* polyInterpolate(int n, int* xs, int* ys) {
             // I) Calculate y' -> Use Ana's trick for converting y to y'
             int y = !qc ? ys[i] : (yPrimes[i] - poly->coefficients[qc-1]) * INV(xs[i]); 
             y = CONG(y);
-            printf("WE ARE AT x=%d, y=%d and y'=%d and ycache=%d\n", xs[i], ys[i], y, yPrimes[i]);
             yPrimes[i] = y; 
-            printf("The value of y' = %d\n", y); 
 
             // II) Calculate Li(0)
             int li = 1; 
-            for (int j=0; j<top; j++) {
-                printf("Li *= %d \n", i == j ? 1 : CONG(-1*xs[j]*INV(xs[i]-xs[j])));
+            for (int j=0; j<top; j++) 
                 li *= i == j ? 1 : CONG(-1*xs[j]*INV(xs[i]-xs[j]));
-            }
-
-            printf("The value of Li(0) = %d\n", CONG(li)); 
+            
             // Sum to the current coefficient 
             currentCoefficient += CONG(y*li);
         }
 
-        printf("FOUND NEW COEFFICIENT: %d\n", CONG(currentCoefficient)); 
         poly->coefficients[qc++] = (uint8_t)CONG(currentCoefficient); 
     }
 

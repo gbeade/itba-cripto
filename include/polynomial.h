@@ -2,13 +2,14 @@
 #define POLYNOMIAL_H
 
 #include <stdint.h>
+
 #define MOD 251
 #define CONG(x) ( (x) < 0 ? ((x*(-1)*(MOD-1))%MOD) : (x%MOD))  // Write a number as a positive residue in MOD congruency
-#define INV(x) ( inverses[CONG(x)-1] )   // Recover the multiplicative inverse in MOD congruency
+#define INV(x) ( inverses[CONG(x)] )   // Recover the multiplicative inverse in MOD congruency
 
 
 static const uint8_t inverses[MOD] = {
-    1, 126, 84, 63, 201, 42, 36, 157, 28, 226, 137, 21, 58, 18, 67, 204,
+    0, 1, 126, 84, 63, 201, 42, 36, 157, 28, 226, 137, 21, 58, 18, 67, 204,
     192, 14, 185, 113, 12, 194, 131, 136, 241, 29, 93, 9, 26, 159, 81, 102,
     213, 96, 208, 7, 95, 218, 103, 182, 49, 6, 216, 97, 106, 191, 235, 68,
     41, 246, 64, 140, 90, 172, 178, 130, 229, 13, 234, 205, 107, 166, 4, 51,
