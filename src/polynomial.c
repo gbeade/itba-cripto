@@ -91,8 +91,5 @@ Polynomial* polyInterpolate(int n, int* xs, int* ys) {
         poly->coefficients[qc++] = (uint8_t)CONG(currentCoefficient); 
     }
 
-
-    polyPrint(poly); 
-
     return poly; 
 }

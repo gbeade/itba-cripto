@@ -33,7 +33,7 @@ void tryLagrange() {
 
     
     int xs[N] = {1, 2, 3}; 
-    int ys[N] = {1, 2, 3}; 
+    int ys[N] = {3, 7, 13}; 
 
 
     // Create polynomial from coefficients

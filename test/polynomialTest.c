@@ -130,7 +130,16 @@ static void testQuadraticInterpolation(CuTest *const cuTest, int s1, int s2, int
 
 
 void testPolynomialInterpolation(CuTest *const cuTest) {
+
+    /* Base case interpolation */
+    testQuadraticInterpolation(cuTest, 1, 1, 1, 1, 2, 3, 3, 7, 13);
+    testQuadraticInterpolation(cuTest, 250, 250, 3, 1, 2, 3, 1, 9, 23);
+
+    /* Interpolate negative numbers - they circle back to positive numbers in Z251 */
+    testQuadraticInterpolation(cuTest, 250, 250, 250, -5, -4, -3, -21, -13, -7);  
+
+    /* We test for quadratic by they are colinear, expect s3=0 */
     testQuadraticInterpolation(cuTest, 0, 1, 0, 1, 2, 3, 1, 2, 3); 
-    testQuadraticInterpolation(cuTest, 1, 1, 1, 1, 2, 3, 3, 7, 15); 
+
 }
 
