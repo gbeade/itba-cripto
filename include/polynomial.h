@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define MOD 251
-#define CONG(x) ( (x) < 0 ? ((x*(-1)*(MOD-1))%MOD) : (x%MOD))  // Write a number as a positive residue in MOD congruency
+#define CONG(x) ( (x) < 0 ? (((x)*(-1)*(MOD-1))%MOD) : (x%MOD))  // Write a number as a positive residue in MOD congruency
 #define INV(x) ( inverses[CONG(x)] )   // Recover the multiplicative inverse in MOD congruency
 
 
@@ -33,10 +33,10 @@ typedef struct Polynomial {
 } Polynomial;
 
 /* Creates a new polynomial from a variable number of unsigned integer coefficients. Terms grow from left to right. */
-Polynomial* polyFromCoefficients(unsigned int n, ...);
+Polynomial* polyFromCoefficients(int n, ...);
 
 /* Evaluates a polynomial on a parameter x */
-uint8_t polyEvaluate(Polynomial* poly, unsigned int x); 
+uint8_t polyEvaluate(Polynomial* poly, int x); 
 
 /* Prints a polynomial */
 void polyPrint(Polynomial* poly); 

@@ -3,7 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Polynomial* polyFromCoefficients(unsigned int n, ...) {
+Polynomial* polyFromCoefficients(int n, ...) {
+
+    if (n<=0)
+        return NULL; 
+        
     va_list args;
     va_start(args, n);
     
@@ -11,8 +15,9 @@ Polynomial* polyFromCoefficients(unsigned int n, ...) {
     poly->degree = n - 1;
     poly->coefficients = (uint8_t*)malloc(n * sizeof(uint8_t));
     
-    for (unsigned i = 0; i < n; i++) {
-        uint8_t coeff = (uint8_t)(va_arg(args, uint32_t) % MOD);
+    for (int i = 0; i < n; i++) {
+        int arg = va_arg(args, int); 
+        uint8_t coeff = (uint8_t)(CONG(arg));
         poly->coefficients[i] = coeff;
     }
     
@@ -21,13 +26,14 @@ Polynomial* polyFromCoefficients(unsigned int n, ...) {
     return poly;
 }
 
-uint8_t polyEvaluate(Polynomial* poly, unsigned int x) {
+uint8_t polyEvaluate(Polynomial* poly, int x) {
     uint32_t result = 0;
     uint32_t power = 1;
     
+    uint8_t x2 = CONG(x); 
     for (int i = 0; i <= poly->degree; i++) {
         result += (uint32_t)poly->coefficients[i] * power;
-        power = (power * x) % MOD;
+        power = (power * x2) % MOD;
         result = result % MOD; 
     }
     

@@ -7,8 +7,11 @@
 CuSuite * getPolynomialSuiteTest(void) {
 	CuSuite *const suite = CuSuiteNew();
 
+	SUITE_ADD_TEST(suite, testCongMacro);
 	SUITE_ADD_TEST(suite, testCreateLinearPolynomial);
 	SUITE_ADD_TEST(suite, testCreateModuloPolynomial);
+	SUITE_ADD_TEST(suite, testCreateNonpositiveDegreePolynomial);
+	SUITE_ADD_TEST(suite, testPolynomialEvaluation);
 
 	return suite;
 }

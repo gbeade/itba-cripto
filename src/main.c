@@ -14,7 +14,7 @@ void tryPolynomial() {
     printf("\nBeginning test poly\n"); 
 
     // Create polynomial from coefficients
-    Polynomial * poly = polyFromCoefficients(3, 1, 1, 1); 
+    Polynomial * poly = polyFromCoefficients(3, 1, -1, 1); 
 
     // Print polynomial
     polyPrint(poly); 
@@ -53,6 +53,6 @@ void tryLagrange() {
 
 
 int main() {
-    tryLagrange(); 
+    tryPolynomial(); 
     return 0;
 }
