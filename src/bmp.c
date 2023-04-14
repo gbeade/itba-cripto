@@ -31,13 +31,14 @@ BMPImage* loadBmp(const char* path) {
         return NULL;
     }
     
-    uint8_t* map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (map == MAP_FAILED) {
         perror("mmap");
         close(fd);
         return NULL;
     }
     
+    // TODO: deep copy of header @gonzabeade
     BMPHeader* bmpHeader = (BMPHeader*) map;
 
     if (bmpHeader->magic_number != 0x4D42) {
