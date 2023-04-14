@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "../include/bmp.h"
 #include "../include/polynomial.h"
+#include "../include/shadow.h"
+
 
 
 void tryBmp(char * path) {
@@ -52,7 +54,44 @@ void tryLagrange() {
 }
 
 
+void tryShadowGeneration() {
+
+    printf("\nBeginning test shadow generation\n------\n"); 
+
+    uint8_t * secret = (uint8_t *)"GONZALO!"; 
+
+    int secretLength = 0; 
+    for (; secret[secretLength]; secretLength++);
+    printf("len of secret: %d\n\n", secretLength);  
+
+    int n = 4;
+    int k = 3; 
+    int shadowSize = secretLength / (k-1); 
+
+    // print shadow as numbers 
+    for (int j=0; j<secretLength; j++) {
+        printf("[%d]", secret[j]); 
+    }
+
+    printf("\n\n"); 
+    printf("n=%d\nk=%d\nshadowSize=%d\n\n", n, k, shadowSize);
+    uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+
+
+    for (int i=0; i<n; i++) {
+        printf("SHADOW %d: \n", i); 
+        for (int j=0; j<shadowSize; j++) {
+            printf("%d ", shadows[i][j]); 
+        }
+        printf("\n\n"); 
+    }
+
+    
+
+
+}
+
 int main() {
-    tryLagrange(); 
+    tryShadowGeneration(); 
     return 0;
 }
