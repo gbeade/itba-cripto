@@ -35,6 +35,9 @@ typedef struct Polynomial {
 /* Creates a new polynomial from a variable number of unsigned integer coefficients. Terms grow from left to right. */
 Polynomial* polyFromCoefficients(int n, ...);
 
+/* Creates a new polynomial from an array of n bytes. Each byte is parsed as a value in MOD. Terms grow from left to right. */
+Polynomial* polyFromBytes(int n, uint8_t * bytes);
+
 /* Evaluates a polynomial on a parameter x */
 uint8_t polyEvaluate(Polynomial* poly, int x); 
 

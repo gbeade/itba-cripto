@@ -18,7 +18,7 @@ BMPHeader* cloneBmpHeader(BMPHeader* src) {
 
 /* Sets the reserved1 byte of the header to the shadow label value */
 void labelBmpImage(BMPImage * bmp, uint16_t label){
-    header->reserved1 = label
+    bmp->header->reserved1 = label; 
 }
 
 /* Generates a BMP image from a deep copy of the header and a shadow copy of the data */
