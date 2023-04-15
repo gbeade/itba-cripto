@@ -3,7 +3,29 @@
 #include "../include/bmp.h"
 #include "../include/polynomial.h"
 #include "../include/shadow.h"
+#include "../include/steganography.h"
 
+void printBits(void const * const ptr, size_t const size)
+{
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+    
+    for (i = size-1; i >= 0; i--) {
+        for (j = 7; j >= 0; j--) {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+        printf(" ");
+    }
+}
+
+void printBytes(uint8_t * vec, int bytes) {
+    for (int i=0 ; i<bytes ; i++) {
+        printBits(vec+i, 1);
+    }
+    puts("");
+}
 
 void tryBmp(char * path) {
     BMPImage* bmp = loadBmp(path);
@@ -68,10 +90,18 @@ void tryShadowGeneration() {
     for (secretLength=1; secret[secretLength-1]; secretLength++);
 
     int shadowSize = secretLength / (k-1); 
+    uint8_t originals[n][secretLength];
 
+   
 
     int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+
+     for (int i=0 ; i<n ; i++) {
+        lsb4Hide(shadows[i], shadowSize, originals[i]);
+        lsb4Show(originals[i], shadowSize, shadows[i]);
+    }
+
     uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
     
     printf("The schema is (%d, %d).\n", k, n);
