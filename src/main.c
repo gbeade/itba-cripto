@@ -58,36 +58,39 @@ void tryShadowGeneration() {
 
     printf("\nBeginning test shadow generation\n------\n"); 
 
-    uint8_t * secret = (uint8_t *)"GONZALO!"; 
+    uint8_t * secret = (uint8_t *)"GONZALO"; 
 
-    int secretLength = 0; 
-    for (; secret[secretLength]; secretLength++);
-    printf("len of secret: %d\n\n", secretLength);  
-
+    // Declare parameters of the schema
     int n = 4;
     int k = 3; 
+
+    // Considers the NULL-terminated
+    int secretLength; 
+    for (secretLength=1; secret[secretLength-1]; secretLength++);
+
     int shadowSize = secretLength / (k-1); 
 
-    // print shadow as numbers 
-    for (int j=0; j<secretLength; j++) {
-        printf("[%d]", secret[j]); 
-    }
 
-    printf("\n\n"); 
-    printf("n=%d\nk=%d\nshadowSize=%d\n\n", n, k, shadowSize);
+    int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
-
-
-    for (int i=0; i<n; i++) {
-        printf("SHADOW %d: \n", i); 
-        for (int j=0; j<shadowSize; j++) {
-            printf("%d ", shadows[i][j]); 
-        }
-        printf("\n\n"); 
-    }
-
+    uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
     
+    printf("The schema is (%d, %d).\n", k, n);
+    printf("The secret %s\n\n", secret); 
 
+    printf("%d shadows were created. They are:\n", n);
+    for (int i=0; i<n; i++) {
+        printf("S%d -> ", i+1);
+        for (int j=0; j<shadowSize; j++) {
+            printf("0x%2X ", shadows[i][j]); 
+        }
+        putchar('\n'); 
+    }
+    putchar('\n');
+
+    printf("We will now combine the first %d shadows.\n", k);
+
+    printf("The reconstructed secret is: %s\n", secretReconstructed); 
 
 }
 

@@ -23,7 +23,6 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     int shadowByteCounter = 0; 
     for (int i=0; i<secretLength; i+=blockSize) {
         Polynomial * fi = polyFromBytes(k, &secret[i]); 
-        polyPrint(fi); 
 
         int ri = 3;  // TODO: replace by a random value 
         uint8_t bi0 = CONG(-1*ri*secret[i]); 
@@ -32,7 +31,6 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
         gi->coefficients[0] = bi0; 
         gi->coefficients[1] = bi1; 
 
-        polyPrint(gi); 
 
         for (int j=0; j<n; j++) {
             shadows[j][shadowByteCounter] = polyEvaluate(fi, j+1);
@@ -40,11 +38,48 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
         }
 
         shadowByteCounter += 2;  
-        putchar('\n'); 
 
         polyFree(fi); 
         polyFree(gi); 
     }
 
     return shadows; 
+}
+
+
+uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
+
+    int secretLength = shadowLength*(k-1); 
+    int blockSize = 2*k - 2;
+    uint8_t * secret = (uint8_t *) malloc(sizeof(uint8_t)*secretLength); 
+
+    int currentBlock = 0; 
+    for (int i=0; i<shadowLength; i+=2) {
+        int ys1[k];
+        int ys2[k]; 
+        for (int j=0; j<k; j++) {
+            ys1[j] = shadows[j][currentBlock*2];
+            ys2[j] = shadows[j][currentBlock*2+1];  
+        }
+
+        Polynomial * fi = polyInterpolate(k, ids, ys1);
+        Polynomial * gi = polyInterpolate(k, ids, ys2);
+
+        // TODO: check for cheating
+
+        for (int t=0; t<k; t++) 
+            secret[currentBlock*blockSize+t] = fi->coefficients[t];
+        
+        for (int t=2; t<k; t++) 
+            secret[currentBlock*blockSize+k+t-2] = gi->coefficients[t];
+        
+
+        free(fi); 
+        free(gi); 
+        currentBlock ++; 
+    }
+
+    return secret; 
+
+
 }
