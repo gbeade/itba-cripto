@@ -26,6 +26,22 @@ Polynomial* polyFromCoefficients(int n, ...) {
     return poly;
 }
 
+Polynomial* polyFromBytes(int n, uint8_t * bytes) {
+
+    if (n <= 0)
+        return NULL; 
+
+    Polynomial* poly = (Polynomial*)malloc(sizeof(Polynomial));
+    poly->degree = n - 1;
+    poly->coefficients = (uint8_t*)malloc(n * sizeof(uint8_t));
+
+    for (int i=0; i<n; i++) 
+        poly->coefficients[i] = CONG(bytes[i]); 
+    
+    return poly; 
+}
+
+
 uint8_t polyEvaluate(Polynomial* poly, int x) {
     uint32_t result = 0;
     uint32_t power = 1;

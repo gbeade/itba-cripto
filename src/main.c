@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../include/bmp.h"
 #include "../include/polynomial.h"
+#include "../include/shadow.h"
 
 
 void tryBmp(char * path) {
@@ -52,7 +53,90 @@ void tryLagrange() {
 }
 
 
+void tryShadowGeneration() {
+
+    printf("\nBeginning test shadow generation\n------\n"); 
+
+    uint8_t * secret = (uint8_t *)"GONZALO"; 
+
+    // Declare parameters of the schema
+    int n = 4;
+    int k = 3; 
+
+    // Considers the NULL-terminated
+    int secretLength; 
+    for (secretLength=1; secret[secretLength-1]; secretLength++);
+
+    int shadowSize = secretLength / (k-1); 
+
+
+    int ids[3] = {1, 2, 3}; 
+    uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+    uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
+    
+    printf("The schema is (%d, %d).\n", k, n);
+    printf("The secret %s\n\n", secret); 
+
+    printf("%d shadows were created. They are:\n", n);
+    for (int i=0; i<n; i++) {
+        printf("S%d -> ", i+1);
+        for (int j=0; j<shadowSize; j++) {
+            printf("0x%2X ", shadows[i][j]); 
+        }
+        putchar('\n'); 
+    }
+    putchar('\n');
+
+    printf("We will now combine the first %d shadows.\n", k);
+    printf("The reconstructed secret is: %s\n", secretReconstructed); 
+}
+
+void tryBmpShadow(char * path) {
+    BMPImage* bmp = loadBmp(path);
+
+    printf("\nBeginning test bmp+shadow generation\n------\n"); 
+
+    uint8_t * secret = bmp->data; 
+
+    // Declare parameters of the schema
+    int n = 5;
+    int k = 3; 
+
+    // Considers the NULL-terminated
+    int secretLength = 512*512; 
+
+    int shadowSize = secretLength / (k-1); 
+
+
+    int ids[3] = {1, 2, 3}; 
+    uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+    uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
+    
+    printf("The schema is (%d, %d).\n", k, n);
+    printf("The secret is the bmp at %s\n\n", path); 
+
+    printf("%d shadows were created. They are:\n", n);
+    for (int i=0; i<n; i++) {
+        printf("S%d -> ", i+1);
+        for (int j=0; j<10; j++) {
+            printf("0x%2X ", shadows[i][j]); 
+        }
+        printf("...\n"); 
+    }
+    putchar('\n');
+
+    int t = 10; // 512*512; 
+    printf("We will now combine the first %d shadows.\n", k);
+    printf("Do the first %d bytes match?\n", t); 
+
+    for (int i=0; i<t; i++) 
+        printf("[0x%2X] ~ [0x%2X] %4s\n", secret[i], secretReconstructed[i], secret[i] == secretReconstructed[i] ? "OK": "FAIL");
+
+
+    freeBmp(bmp); 
+}
+
 int main() {
-    tryLagrange(); 
+    tryBmpShadow("samples/sample.bmp"); 
     return 0;
 }

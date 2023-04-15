@@ -5,6 +5,7 @@
 uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n);
 
 /* returns NULL if cheating */
-uint8_t ** reconstruct(uint8_t ** shadows, int k, int * ids);
+uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k); 
+
 
 #endif // SHADOW_H
