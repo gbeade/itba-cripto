@@ -3,6 +3,7 @@
 #include "../include/bmp.h"
 #include "../include/polynomial.h"
 #include "../include/steganography.h"
+#define MSB(x,n) ( (x) >> (8 - (n) ) )
 
 void printBits(void const * const ptr, size_t const size)
 {
@@ -17,6 +18,13 @@ void printBits(void const * const ptr, size_t const size)
         }
         printf(" ");
     }
+}
+
+void printBytes(uint8_t * vec, int bytes) {
+    for (int i=0 ; i<bytes ; i++) {
+        printBits(vec+i, 1);
+    }
+    puts("");
 }
 
 void tryBmp(char * path) {
@@ -66,12 +74,7 @@ void tryLagrange() {
     polyFree(poly); 
 }
 
-void printBytes(uint8_t * vec, int bytes) {
-    for (int i=0 ; i<bytes ; i++) {
-        printBits(vec+i, 1);
-    }
-    puts("");
-}
+
 
 
 int main() {

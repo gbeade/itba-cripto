@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 
 #define LSB(x,n) ( ((x) >> (n) << (n)) ^ (x) ) 
+#define MSB(x,n) ( (x) >> (CHAR_BIT - (n) ) )
 #define SET_LSBS_TO_ZERO(x, n) ( (x) >> (n) << (n) ) 
 
 static uint8_t * hideNextByte(uint8_t *originalBytes, uint8_t byteToHide, uint8_t bitsPerByte) {
@@ -11,10 +12,10 @@ static uint8_t * hideNextByte(uint8_t *originalBytes, uint8_t byteToHide, uint8_
     while (originalBytes < byteCarrierLimit) {
         uint8_t carrierByte = *originalBytes;
         carrierByte = SET_LSBS_TO_ZERO(carrierByte, bitsPerByte);
-        uint8_t bitsToHide = LSB(byteToHide, bitsPerByte);
+        uint8_t bitsToHide = MSB(byteToHide, bitsPerByte);
         carrierByte = carrierByte | bitsToHide;
         *originalBytes = carrierByte;
-        byteToHide >>= bitsPerByte;
+        byteToHide <<= bitsPerByte;
         originalBytes++;
     }
     return originalBytes;
@@ -37,8 +38,8 @@ static uint8_t extractNextByte(uint8_t ** offuscatedBytesPtr, uint8_t bitsPerByt
     while (offuscatedBytes < byteCarrierLimit) {
         uint8_t carrierByte = *offuscatedBytes;
         uint8_t hiddenBits = LSB(carrierByte, bitsPerByte);
-        byte >>= bitsPerByte;
-        byte |= (hiddenBits << (CHAR_BIT-bitsPerByte));
+        byte <<= bitsPerByte;
+        byte |= hiddenBits;
         offuscatedBytes++;
     }
     *offuscatedBytesPtr = offuscatedBytes;
