@@ -76,6 +76,44 @@ void testCreateModuloPolynomial(CuTest *const cuTest) {
     polyFree(poly4); 
 }
 
+
+void testCreatePolyFromBytes(CuTest *const cuTest) {
+
+    uint8_t ary1[4] = {0x01, 0x23, 0x45, 0x19};
+    uint8_t ary2[6] = "SECRET"; 
+    uint8_t ary3[5] = {0xFF, 0xFE, 0xFD, 0xFC, 0xFB}; // overflow in MOD 251
+ 
+    Polynomial * poly1 = polyFromBytes(4, ary1); 
+    Polynomial * poly2 = polyFromBytes(6, ary2); 
+    Polynomial * poly3 = polyFromBytes(5, ary3); 
+
+    CuAssertPtrNotNull(cuTest, poly1); 
+    CuAssertPtrNotNull(cuTest, poly2); 
+    CuAssertPtrNotNull(cuTest, poly3); 
+
+    CuAssertIntEquals(cuTest, poly1->coefficients[0], 1);
+    CuAssertIntEquals(cuTest, poly1->coefficients[1], 0x23);
+    CuAssertIntEquals(cuTest, poly1->coefficients[2], 0x45);
+    CuAssertIntEquals(cuTest, poly1->coefficients[3], 0x19);
+
+    CuAssertIntEquals(cuTest, poly2->coefficients[0], 'S');
+    CuAssertIntEquals(cuTest, poly2->coefficients[1], 'E');
+    CuAssertIntEquals(cuTest, poly2->coefficients[2], 'C');
+    CuAssertIntEquals(cuTest, poly2->coefficients[3], 'R');
+    CuAssertIntEquals(cuTest, poly2->coefficients[4], 'E');
+    CuAssertIntEquals(cuTest, poly2->coefficients[5], 'T');
+    
+    CuAssertIntEquals(cuTest, poly3->coefficients[0], 4);
+    CuAssertIntEquals(cuTest, poly3->coefficients[1], 3);
+    CuAssertIntEquals(cuTest, poly3->coefficients[2], 2);
+    CuAssertIntEquals(cuTest, poly3->coefficients[3], 1);
+    CuAssertIntEquals(cuTest, poly3->coefficients[4], 0);
+
+    polyFree(poly1); 
+    polyFree(poly2); 
+    polyFree(poly3); 
+}
+
 void testCreateNonpositiveDegreePolynomial(CuTest *const cuTest) {
     Polynomial * poly1 = polyFromCoefficients(0);
     Polynomial * poly2 = polyFromCoefficients(-1);

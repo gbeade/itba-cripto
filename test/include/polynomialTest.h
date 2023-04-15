@@ -11,6 +11,8 @@ void testCongMacro(CuTest *const cuTest);
 void testCreateLinearPolynomial(CuTest *const cuTest);
 void testCreateModuloPolynomial(CuTest *const cuTest);
 void testCreateNonpositiveDegreePolynomial(CuTest *const cuTest);
+void testCreatePolyFromBytes(CuTest *const cuTest); 
+
 
 /* Test polynomial evaluation */
 void testPolynomialEvaluation(CuTest *const cuTest);
