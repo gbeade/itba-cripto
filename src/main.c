@@ -2,7 +2,22 @@
 #include <stdlib.h>
 #include "../include/bmp.h"
 #include "../include/polynomial.h"
+#include "../include/steganography.h"
 
+void printBits(void const * const ptr, size_t const size)
+{
+    unsigned char *b = (unsigned char*) ptr;
+    unsigned char byte;
+    int i, j;
+    
+    for (i = size-1; i >= 0; i--) {
+        for (j = 7; j >= 0; j--) {
+            byte = (b[i] >> j) & 1;
+            printf("%u", byte);
+        }
+        printf(" ");
+    }
+}
 
 void tryBmp(char * path) {
     BMPImage* bmp = loadBmp(path);
@@ -49,6 +64,13 @@ void tryLagrange() {
 
 
     polyFree(poly); 
+}
+
+void printBytes(uint8_t * vec, int bytes) {
+    for (int i=0 ; i<bytes ; i++) {
+        printBits(vec+i, 1);
+    }
+    puts("");
 }
 
 

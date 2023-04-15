@@ -2,7 +2,7 @@
 
 #include "include/cuTest.h"
 #include "include/polynomialTest.h"
-
+#include "include/steganographyTest.h"
 
 CuSuite * getPolynomialSuiteTest(void) {
 	CuSuite *const suite = CuSuiteNew();
@@ -17,11 +17,24 @@ CuSuite * getPolynomialSuiteTest(void) {
 	return suite;
 }
 
+CuSuite * getSteganographySuiteTest(void) {
+	CuSuite *const suite = CuSuiteNew();
+
+	SUITE_ADD_TEST(suite, testHideAndShowlsb2);
+	SUITE_ADD_TEST(suite, testHideAndShowlsb4);
+	SUITE_ADD_TEST(suite, testHidelsb2);
+	SUITE_ADD_TEST(suite, testHidelsb4);
+
+
+	return suite;
+}
+
 void runAllTests(void) {
 	CuString *output = CuStringNew();
 	CuSuite *suite = CuSuiteNew();
 
 	CuSuiteAddSuite(suite, getPolynomialSuiteTest());
+	CuSuiteAddSuite(suite, getSteganographySuiteTest());
 
 	CuSuiteRun(suite);
 
