@@ -1,7 +1,5 @@
 #include "../include/steganography.h"
 #include <limits.h>
-#include <libc.h>
-#include <arpa/inet.h>
 
 #define LSB(x,n) ( ((x) >> (n) << (n)) ^ (x) ) 
 #define MSB(x,n) ( (x) >> (CHAR_BIT - (n) ) )

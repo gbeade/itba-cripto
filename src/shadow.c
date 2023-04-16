@@ -24,7 +24,8 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     for (int i=0; i<secretLength; i+=blockSize) {
         Polynomial * fi = polyFromBytes(k, &secret[i]); 
 
-        int ri = 3;  // TODO: replace by a random value 
+        int ri = 3;  // TODO: replace by a random value
+         
         uint8_t bi0 = CONG(-1*ri*secret[i]); 
         uint8_t bi1 = CONG(-1*ri*secret[i+1]);
         Polynomial * gi = polyFromBytes(k, &secret[i+k-2]);
@@ -74,8 +75,8 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
             secret[currentBlock*blockSize+k+t-2] = gi->coefficients[t];
         
 
-        free(fi); 
-        free(gi); 
+        polyFree(fi); 
+        polyFree(gi); 
         currentBlock ++; 
     }
 

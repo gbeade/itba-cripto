@@ -22,37 +22,55 @@ typedef struct  __attribute__((__packed__)) BMPHeader {
     uint32_t important_colors;      // number of important colors in the color palette (0 = all are important)
 } BMPHeader;
 
+typedef struct BMPMap {
+    uint8_t * map;  // Memory-mapped array of bytes that represent a .bmp
+} BMPMap; 
+
 typedef struct BMPImage {
     BMPHeader * header; 
     uint8_t * data;  // 0x00->black, 0xFF->white
 } BMPImage;
 
-/* Sets the reserved1 byte of the header to the shadow label value */
-void labelBmpImage(BMPImage * bmp, uint16_t label);
 
-/* Generates a BMP image from a deep copy of the header and a shadow copy of the data */
-BMPImage * generateImage(BMPHeader * header, uint8_t * data);
+/* BMP LOADING AND UNLOADING */
 
-/* Given a path, loads a BMP file into C structures and returns a pointer to the resulting BMPImage. */
-BMPImage* loadBmp(const char* path); 
+/* Memory-maps a file and returns a struct with information about its memory location*/
+BMPMap * newBmpMap(const char * path); 
+
+/* Interprets a memory-mapped bmp file as a BMPImage structure. The resulting BMPImage is immutable.*/
+BMPImage * mapToBmpImage(BMPMap * map); 
+
+/* Interprets a arrays of bytes BMPImage structure. The resulting BMPImage is mutable.*/
+BMPImage * bytesToBmpImage(BMPMap * map); 
+
+/* Releases the resources used by the BMPImage structure */
+void freeBmpImage(BMPImage * bmpImage);
+
+/* Releases the resources used by the BMPMap structure */
+void freeBmpMap(BMPMap * bmpMap);
+
 
 /* Creates a deep copy of a BMP header and returns a pointer to the resulting BMPHeader. */
 BMPHeader* cloneBmpHeader(BMPHeader* src); 
 
-/* Dumps all bytes of a BMPImage into stdout in an inverted format. It can be piped into a file. */
-void dumpBmpInverted(BMPImage* bmp);
+/* Dumps all bytes of a BMPImage into a file in specified path. If it doesn't exist, the file is created. */
+void dumpBmpToFile(BMPImage * bmp, char * path);
 
 /* Dumps all bytes of a BMPImage into stdout. It can be piped into a file. */
 void dumpBmp(BMPImage* bmp); 
 
-/* Dumps all bytes of a BMPImage into a file in specified path. If it doesn't exist, the file is created. */
-void dumpBmpToFile(BMPImage * bmp, char * path);
+
+
+/* BMP MANIPULATION */
+
+/* Sets the reserved1 byte of the header to the shadow label value */
+void labelBmpImage(BMPImage * bmp, uint16_t label);
+
+/* Dumps all bytes of a BMPImage into stdout in an inverted format. It can be piped into a file. */
+void dumpBmpInverted(BMPImage* bmp);
 
 /* Prints debugging information about the BMPImage, including its header and image data. */
-void debugBmp(BMPImage* bmp); 
-
-/* Releases the resources used by the BMP map, including its header and image data. */
-void freeBmp(BMPImage * bmp); 
+void debugBmp(BMPImage* bmp);  
 
 
 #endif // BMP_H

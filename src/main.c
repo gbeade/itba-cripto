@@ -28,9 +28,11 @@ void printBytes(uint8_t * vec, int bytes) {
 }
 
 void tryBmp(char * path) {
-    BMPImage* bmp = loadBmp(path);
-    dumpBmpInverted(bmp); 
-    freeBmp(bmp); 
+    BMPMap * bmpMap = newBmpMap(path);
+    BMPImage * bmpImage = mapToBmpImage(bmpMap); 
+    dumpBmpToFile(bmpImage, "bin/out.bmp"); 
+    freeBmpImage(bmpImage); 
+    freeBmpMap(bmpMap); 
 }
 
 void tryPolynomial() {
@@ -82,7 +84,7 @@ void tryShadowGeneration() {
     uint8_t * secret = (uint8_t *)"GONZALO"; 
 
     // Declare parameters of the schema
-    int n = 4;
+    int n = 5;
     int k = 3; 
 
     // Considers the NULL-terminated
@@ -122,7 +124,8 @@ void tryShadowGeneration() {
 }
 
 void tryBmpShadow(char * path) {
-    BMPImage* bmp = loadBmp(path);
+    BMPMap* bmpMap = newBmpMap(path);
+    BMPImage * bmp = mapToBmpImage(bmpMap); 
 
     printf("\nBeginning test bmp+shadow generation\n------\n"); 
 
@@ -163,10 +166,15 @@ void tryBmpShadow(char * path) {
         printf("[0x%2X] ~ [0x%2X] %4s\n", secret[i], secretReconstructed[i], secret[i] == secretReconstructed[i] ? "OK": "FAIL");
 
 
-    freeBmp(bmp); 
+    for (int i=0; i<n; i++)
+        free(shadows[i]); 
+    free(shadows); 
+    free(secretReconstructed); 
+    freeBmpImage(bmp); 
+    freeBmpMap(bmpMap); 
 }
 
 int main() {
-    tryBmpShadow("samples/sample.bmp"); 
+    tryBmpShadow("samples/sample2.bmp"); 
     return 0;
 }
