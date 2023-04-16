@@ -60,7 +60,7 @@ void tryShadowGeneration() {
     uint8_t * secret = (uint8_t *)"GONZALO"; 
 
     // Declare parameters of the schema
-    int n = 4;
+    int n = 5;
     int k = 3; 
 
     // Considers the NULL-terminated
@@ -137,6 +137,6 @@ void tryBmpShadow(char * path) {
 }
 
 int main() {
-    tryBmpShadow("samples/sample.bmp"); 
+    tryShadowGeneration(); 
     return 0;
 }
