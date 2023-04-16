@@ -25,34 +25,39 @@ typedef struct  __attribute__((__packed__)) BMPHeader {
 typedef struct BMPImage {
     BMPHeader * header; 
     uint8_t * data;  // 0x00->black, 0xFF->white
+    uint8_t * map; // if not null, pointer to the memory-mapped file 
 } BMPImage;
 
-/* Sets the reserved1 byte of the header to the shadow label value */
-void labelBmpImage(BMPImage * bmp, uint16_t label);
 
-/* Generates a BMP image from a deep copy of the header and a shadow copy of the data */
-BMPImage * generateImage(BMPHeader * header, uint8_t * data);
+/* BMP LOADING AND UNLOADING */
 
 /* Given a path, loads a BMP file into C structures and returns a pointer to the resulting BMPImage. */
 BMPImage* loadBmp(const char* path); 
 
+/* Releases the resources used by the BMP map, including its header and image data. */
+void freeBmp(BMPImage * bmp);
+
 /* Creates a deep copy of a BMP header and returns a pointer to the resulting BMPHeader. */
 BMPHeader* cloneBmpHeader(BMPHeader* src); 
-
-/* Dumps all bytes of a BMPImage into stdout in an inverted format. It can be piped into a file. */
-void dumpBmpInverted(BMPImage* bmp);
-
-/* Dumps all bytes of a BMPImage into stdout. It can be piped into a file. */
-void dumpBmp(BMPImage* bmp); 
 
 /* Dumps all bytes of a BMPImage into a file in specified path. If it doesn't exist, the file is created. */
 void dumpBmpToFile(BMPImage * bmp, char * path);
 
-/* Prints debugging information about the BMPImage, including its header and image data. */
-void debugBmp(BMPImage* bmp); 
+/* Dumps all bytes of a BMPImage into stdout. It can be piped into a file. */
+void dumpBmp(BMPImage* bmp); 
 
-/* Releases the resources used by the BMP map, including its header and image data. */
-void freeBmp(BMPImage * bmp); 
+
+
+/* BMP Manipulation */
+
+/* Sets the reserved1 byte of the header to the shadow label value */
+void labelBmpImage(BMPImage * bmp, uint16_t label);
+
+/* Dumps all bytes of a BMPImage into stdout in an inverted format. It can be piped into a file. */
+void dumpBmpInverted(BMPImage* bmp);
+
+/* Prints debugging information about the BMPImage, including its header and image data. */
+void debugBmp(BMPImage* bmp);  
 
 
 #endif // BMP_H

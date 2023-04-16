@@ -29,7 +29,7 @@ void printBytes(uint8_t * vec, int bytes) {
 
 void tryBmp(char * path) {
     BMPImage* bmp = loadBmp(path);
-    dumpBmpInverted(bmp); 
+    dumpBmpToFile(bmp, "bin/out.bmp"); 
     freeBmp(bmp); 
 }
 
@@ -167,6 +167,6 @@ void tryBmpShadow(char * path) {
 }
 
 int main() {
-    tryShadowGeneration(); 
+    tryBmp("samples/sample.bmp"); 
     return 0;
 }

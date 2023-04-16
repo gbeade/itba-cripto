@@ -21,28 +21,6 @@ void labelBmpImage(BMPImage * bmp, uint16_t label){
     bmp->header->reserved1 = label; 
 }
 
-/* Generates a BMP image from a deep copy of the header and a shadow copy of the data */
-BMPImage * generateImage(BMPHeader * header, uint8_t * data){
-    // Allocate memory for new BMPImage
-    BMPImage* bmp = malloc(sizeof(BMPImage));
-    if (!bmp) {
-        return NULL; // allocation failed
-    }
-
-    // Deep copy header
-    bmp->header = malloc(sizeof(BMPHeader));
-    if (!bmp->header) {
-        free(bmp); // free previously allocated memory
-        return NULL; // allocation failed
-    }
-    memcpy(bmp->header, header, sizeof(BMPHeader));
-
-    // Shadow copy data
-    bmp->data = data;
-
-    return bmp;
-}
-
 BMPImage* loadBmp(const char* path) {
     int fd = open(path, O_RDONLY);
     if (fd == -1) {
@@ -86,6 +64,7 @@ BMPImage* loadBmp(const char* path) {
     uint8_t* data = map+bmpHeader->data_offset;
     bmpImage->data = data; 
     bmpImage->header = bmpHeader; 
+    bmpImage->map = map; 
 
     return bmpImage;
 }
@@ -157,7 +136,7 @@ void dumpBmpToFile(BMPImage * bmp, char * path){
     int padding = (4 - (width % 4)) % 4;  // BMP row padding is rounded up to a multiple of 4 bytes
     uint8_t* data = bmp->data;
 
-    for (int y = height - 1; y >= 0; y--) {  // iterate over rows in reverse order
+    for (int y = 0; y < height; y++) { 
         for (int x = 0; x < width; x++) {   // iterate over pixels in row
             uint8_t pixel = *(data + y*(width + padding) + x);
             fwrite(&pixel, sizeof(uint8_t), 1, file);
@@ -174,7 +153,10 @@ void dumpBmpToFile(BMPImage * bmp, char * path){
 }
 
 void freeBmp(BMPImage * bmp) {
-    munmap(bmp->header, bmp->header->file_size);
+    if (bmp->map)
+        munmap(bmp->map, bmp->header->file_size);
+    else 
+        free(bmp->header);
     free(bmp); 
 }
 
