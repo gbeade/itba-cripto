@@ -31,8 +31,13 @@ void tryBmp(char * path) {
     BMPMap * bmpMap = newBmpMap(path);
     BMPImage * bmpImage = mapToBmpImage(bmpMap); 
 
-    BMPImage * bmp2 = bytesToBmpImage(bmpImage->header, bmpImage->data); 
+    // BMPHeader * bmpHeaderNew = bmpImage->header; 
+
+    BMPHeader * bmpHeaderNew = cloneBmpHeader(bmpImage->header); 
+    BMPImage * bmp2 = bytesToBmpImage((uint8_t *)bmpHeaderNew, bmpImage->data); 
     dumpBmpToFile(bmp2, "bin/out.bmp"); 
+    free(bmpHeaderNew); 
+
     freeBmpImage(bmpImage); 
     freeBmpMap(bmpMap); 
     freeBmpImage(bmp2); 

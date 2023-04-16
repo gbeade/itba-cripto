@@ -11,7 +11,7 @@
 
 
 BMPHeader* cloneBmpHeader(BMPHeader* src) {
-    BMPHeader* dest = malloc(sizeof(BMPHeader));
+    BMPHeader* dest = malloc(src->data_offset);
     memcpy(dest, src, sizeof(BMPHeader));
     return dest;
 }
