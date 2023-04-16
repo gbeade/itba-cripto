@@ -75,8 +75,8 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
             secret[currentBlock*blockSize+k+t-2] = gi->coefficients[t];
         
 
-        free(fi); 
-        free(gi); 
+        polyFree(fi); 
+        polyFree(gi); 
         currentBlock ++; 
     }
 

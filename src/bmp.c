@@ -21,7 +21,7 @@ void labelBmpImage(BMPImage * bmp, uint16_t label){
     bmp->header->reserved1 = label; 
 }
 
-BMPImage* loadBmp(const char* path) {
+BMPMap * newBmpMap(const char* path) {
     int fd = open(path, O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -41,10 +41,8 @@ BMPImage* loadBmp(const char* path) {
         close(fd);
         return NULL;
     }
-    
-    // TODO: deep copy of header @gonzabeade
-    BMPHeader* bmpHeader = (BMPHeader*) map;
 
+    BMPHeader* bmpHeader = (BMPHeader*) map;
     if (bmpHeader->magic_number != 0x4D42) {
         fprintf(stderr, "Invalid BMP magic number\n");
         munmap(map, file_stat.st_size);
@@ -59,14 +57,18 @@ BMPImage* loadBmp(const char* path) {
         return NULL;
     }
 
+    BMPMap * bmpMap = malloc(sizeof(BMPMap));
+    bmpMap->map = map; 
+
+    return bmpMap;
+}
+
+BMPImage * mapToBmpImage(BMPMap * bmpMap) {
     BMPImage * bmpImage = (BMPImage *) malloc(sizeof(BMPImage)); 
-
-    uint8_t* data = map+bmpHeader->data_offset;
+    bmpImage->header = (BMPHeader *)bmpMap->map; 
+    uint8_t* data = bmpMap->map+bmpImage->header->data_offset;
     bmpImage->data = data; 
-    bmpImage->header = bmpHeader; 
-    bmpImage->map = map; 
-
-    return bmpImage;
+    return bmpImage; 
 }
 
 
@@ -152,12 +154,13 @@ void dumpBmpToFile(BMPImage * bmp, char * path){
     fclose(file);
 }
 
-void freeBmp(BMPImage * bmp) {
-    if (bmp->map)
-        munmap(bmp->map, bmp->header->file_size);
-    else 
-        free(bmp->header);
-    free(bmp); 
+void freeBmpImage(BMPImage * bmpImage) {
+    free(bmpImage); 
+}
+
+void freeBmpMap(BMPMap * bmpMap) {
+    munmap(bmpMap->map, ((BMPHeader *)bmpMap->map)->file_size);
+    free(bmpMap);
 }
 
 void debugBmp(BMPImage * bmp) {

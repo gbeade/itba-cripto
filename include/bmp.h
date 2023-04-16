@@ -22,20 +22,33 @@ typedef struct  __attribute__((__packed__)) BMPHeader {
     uint32_t important_colors;      // number of important colors in the color palette (0 = all are important)
 } BMPHeader;
 
+typedef struct BMPMap {
+    uint8_t * map;  // Memory-mapped array of bytes that represent a .bmp
+} BMPMap; 
+
 typedef struct BMPImage {
     BMPHeader * header; 
     uint8_t * data;  // 0x00->black, 0xFF->white
-    uint8_t * map; // if not null, pointer to the memory-mapped file 
 } BMPImage;
 
 
 /* BMP LOADING AND UNLOADING */
 
-/* Given a path, loads a BMP file into C structures and returns a pointer to the resulting BMPImage. */
-BMPImage* loadBmp(const char* path); 
+/* Memory-maps a file and returns a struct with information about its memory location*/
+BMPMap * newBmpMap(const char * path); 
 
-/* Releases the resources used by the BMP map, including its header and image data. */
-void freeBmp(BMPImage * bmp);
+/* Interprets a memory-mapped bmp file as a BMPImage structure. The resulting BMPImage is immutable.*/
+BMPImage * mapToBmpImage(BMPMap * map); 
+
+/* Interprets a arrays of bytes BMPImage structure. The resulting BMPImage is mutable.*/
+BMPImage * bytesToBmpImage(BMPMap * map); 
+
+/* Releases the resources used by the BMPImage structure */
+void freeBmpImage(BMPImage * bmpImage);
+
+/* Releases the resources used by the BMPMap structure */
+void freeBmpMap(BMPMap * bmpMap);
+
 
 /* Creates a deep copy of a BMP header and returns a pointer to the resulting BMPHeader. */
 BMPHeader* cloneBmpHeader(BMPHeader* src); 
@@ -48,7 +61,7 @@ void dumpBmp(BMPImage* bmp);
 
 
 
-/* BMP Manipulation */
+/* BMP MANIPULATION */
 
 /* Sets the reserved1 byte of the header to the shadow label value */
 void labelBmpImage(BMPImage * bmp, uint16_t label);
