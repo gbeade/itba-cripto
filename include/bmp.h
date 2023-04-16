@@ -37,11 +37,11 @@ typedef struct BMPImage {
 /* Memory-maps a file and returns a struct with information about its memory location*/
 BMPMap * newBmpMap(const char * path); 
 
-/* Interprets a memory-mapped bmp file as a BMPImage structure. The resulting BMPImage is immutable.*/
+/* Interprets a memory-mapped bmp file as a BMPImage structure. */
 BMPImage * mapToBmpImage(BMPMap * map); 
 
-/* Interprets a arrays of bytes BMPImage structure. The resulting BMPImage is mutable.*/
-BMPImage * bytesToBmpImage(BMPMap * map); 
+/* Interprets a arrays of bytes BMPImage structure. */
+BMPImage * bytesToBmpImage(uint8_t * header, uint8_t * data); 
 
 /* Releases the resources used by the BMPImage structure */
 void freeBmpImage(BMPImage * bmpImage);

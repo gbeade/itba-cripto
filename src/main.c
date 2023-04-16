@@ -30,9 +30,12 @@ void printBytes(uint8_t * vec, int bytes) {
 void tryBmp(char * path) {
     BMPMap * bmpMap = newBmpMap(path);
     BMPImage * bmpImage = mapToBmpImage(bmpMap); 
-    dumpBmpToFile(bmpImage, "bin/out.bmp"); 
+
+    BMPImage * bmp2 = bytesToBmpImage(bmpImage->header, bmpImage->data); 
+    dumpBmpToFile(bmp2, "bin/out.bmp"); 
     freeBmpImage(bmpImage); 
     freeBmpMap(bmpMap); 
+    freeBmpImage(bmp2); 
 }
 
 void tryPolynomial() {
@@ -175,6 +178,6 @@ void tryBmpShadow(char * path) {
 }
 
 int main() {
-    tryBmpShadow("samples/sample2.bmp"); 
+    tryBmp("samples/inverted.bmp"); 
     return 0;
 }

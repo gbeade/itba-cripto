@@ -71,6 +71,13 @@ BMPImage * mapToBmpImage(BMPMap * bmpMap) {
     return bmpImage; 
 }
 
+BMPImage * bytesToBmpImage(uint8_t * header, uint8_t * data) {
+    BMPImage * bmpImage = (BMPImage *) malloc(sizeof(BMPImage)); 
+    bmpImage->header = (BMPHeader *)header; 
+    bmpImage->data = data; 
+    return bmpImage; 
+}
+
 
 void dumpBmpInverted(BMPImage* bmp) {
     // Dump header as-is
