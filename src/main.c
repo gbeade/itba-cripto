@@ -4,6 +4,8 @@
 #include "../include/polynomial.h"
 #include "../include/shadow.h"
 #include "../include/steganography.h"
+#include "../include/img.h"
+
 
 void printBits(void const * const ptr, size_t const size)
 {
@@ -183,14 +185,17 @@ void tryBmp(char * path) {
     freeBmpImage(bmpImage1); 
     freeBmpImage(bmpImage2); 
     freeBmpImage(bmp); 
-
     free(data); 
 
     freeBmpMap(bmpMap1); 
     freeBmpMap(bmpMap2); 
 }
 
+void tryComplete() {
+    distribute("samples/shadows", "samples/sample.bmp", 3); 
+}
+
 int main() {
-    tryBmp("samples/inverted.bmp"); 
+    tryComplete(); 
     return 0;
 }
