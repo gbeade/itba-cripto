@@ -30,9 +30,17 @@ void printBytes(uint8_t * vec, int bytes) {
 void tryBmp(char * path) {
     BMPMap * bmpMap = newBmpMap(path);
     BMPImage * bmpImage = mapToBmpImage(bmpMap); 
-    dumpBmpToFile(bmpImage, "bin/out.bmp"); 
+
+    // BMPHeader * bmpHeaderNew = bmpImage->header; 
+
+    BMPHeader * bmpHeaderNew = cloneBmpHeader(bmpImage->header);  // ERROR IN THIS FUNCTION!! 
+    BMPImage * bmp2 = bytesToBmpImage((uint8_t *)bmpHeaderNew, bmpImage->data); 
+    dumpBmpToFile(bmp2, "bin/out.bmp"); 
+    free(bmpHeaderNew); 
+
     freeBmpImage(bmpImage); 
     freeBmpMap(bmpMap); 
+    freeBmpImage(bmp2); 
 }
 
 void tryPolynomial() {
@@ -175,6 +183,6 @@ void tryBmpShadow(char * path) {
 }
 
 int main() {
-    tryBmpShadow("samples/sample2.bmp"); 
+    tryBmp("samples/inverted.bmp"); 
     return 0;
 }

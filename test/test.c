@@ -3,6 +3,7 @@
 #include "include/cuTest.h"
 #include "include/polynomialTest.h"
 #include "include/steganographyTest.h"
+#include <stdlib.h>
 
 CuSuite * getPolynomialSuiteTest(void) {
 	CuSuite *const suite = CuSuiteNew();
@@ -34,8 +35,10 @@ void runAllTests(void) {
 	CuString *output = CuStringNew();
 	CuSuite *suite = CuSuiteNew();
 
-	CuSuiteAddSuite(suite, getPolynomialSuiteTest());
-	CuSuiteAddSuite(suite, getSteganographySuiteTest());
+	CuSuite * polynomialSuite = getPolynomialSuiteTest(); 
+	CuSuite * steganographySuite = getSteganographySuiteTest(); 
+	CuSuiteAddSuite(suite, polynomialSuite);
+	CuSuiteAddSuite(suite, steganographySuite);
 
 	CuSuiteRun(suite);
 
@@ -43,6 +46,11 @@ void runAllTests(void) {
 	CuSuiteDetails(suite, output);
 
 	printf("%s\n", output->buffer);
+
+	CuStringDelete(output); 
+	CuSuiteDelete(steganographySuite);
+	CuSuiteDelete(polynomialSuite);
+	free(suite); 
 }
 
 int main(void) {

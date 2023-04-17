@@ -11,7 +11,7 @@
 
 
 BMPHeader* cloneBmpHeader(BMPHeader* src) {
-    BMPHeader* dest = malloc(sizeof(BMPHeader));
+    BMPHeader* dest = malloc(src->data_offset);
     memcpy(dest, src, sizeof(BMPHeader));
     return dest;
 }
@@ -67,6 +67,13 @@ BMPImage * mapToBmpImage(BMPMap * bmpMap) {
     BMPImage * bmpImage = (BMPImage *) malloc(sizeof(BMPImage)); 
     bmpImage->header = (BMPHeader *)bmpMap->map; 
     uint8_t* data = bmpMap->map+bmpImage->header->data_offset;
+    bmpImage->data = data; 
+    return bmpImage; 
+}
+
+BMPImage * bytesToBmpImage(uint8_t * header, uint8_t * data) {
+    BMPImage * bmpImage = (BMPImage *) malloc(sizeof(BMPImage)); 
+    bmpImage->header = (BMPHeader *)header; 
     bmpImage->data = data; 
     return bmpImage; 
 }
