@@ -49,3 +49,6 @@ bin/test: $(TEST_OBJECTS)
 test: bin/test
 	./bin/test
 
+valgrind-test: CFLAGS := $(filter-out -fsanitize=address,$(CFLAGS))
+valgrind-test: bin/test
+	valgrind --leak-check=full --show-leak-kinds=all ./bin/test
