@@ -20,10 +20,11 @@ static uint8_t * hideNextByte(uint8_t *originalBytes, uint8_t byteToHide, uint8_
 }
 
 static uint8_t * lsbHide(uint8_t * secret, int secretLength, uint8_t * original, int bitsPerByte) {
+    uint8_t * originalBackup = original;
     for (int i = 0 ; i < secretLength ; i++) {
         original = hideNextByte(original, secret[i], bitsPerByte);
     }
-    return original;
+    return originalBackup;
 }
 
 static uint8_t extractNextByte(uint8_t ** offuscatedBytesPtr, uint8_t bitsPerByte) {
