@@ -4,20 +4,20 @@
 
 
 void testHidelsb4(CuTest *const cuTest) {
-    uint8_t secret[4] = {0b11111111, 0b00110100, 0b00010010, 0b00100011 };
-    uint8_t original[8] = {0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00011111 };
+    uint8_t secret[4] = {0xFF, 0x34, 0x12, 0x23 };
+    uint8_t original[8] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x1F };
     lsb4Hide(secret, 4, original);
-    uint8_t answer[8] = {0b00011111, 0b00011111, 0b00010011, 0b00010100, 0b00010001, 0b00010010, 0b00010010, 0b00010011 };
+    uint8_t answer[8] = {0x1F, 0x1F, 0x13, 0x14, 0x11, 0x12, 0x12, 0x13 };
     for (int i = 0 ; i< 8 ; i++) {
         CuAssertIntEquals(cuTest, original[i], answer[i]);
     }
 }
 
 void testHidelsb2(CuTest *const cuTest) {
-    uint8_t secret[2] = {0b11111111, 0b00110100};
-    uint8_t original[8] = {0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00010001, 0b00011111 };
+    uint8_t secret[2] = {0xFF, 0x34};
+    uint8_t original[8] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x1F };
     lsb2Hide(secret, 4, original);
-    uint8_t answer[8] = {0b00010011,0b00010011, 0b00010011, 0b00010011, 0b00010000, 0b00010011, 0b00010001, 0b00011100 };
+    uint8_t answer[8] = {0x13, 0x13, 0x13, 0x13, 0x10, 0x13, 0x11, 0x1C };
     for (int i = 0 ; i< 8 ; i++) {
         CuAssertIntEquals(cuTest, original[i], answer[i]);
     }

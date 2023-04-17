@@ -33,7 +33,7 @@ void tryBmp(char * path) {
 
     // BMPHeader * bmpHeaderNew = bmpImage->header; 
 
-    BMPHeader * bmpHeaderNew = cloneBmpHeader(bmpImage->header); 
+    BMPHeader * bmpHeaderNew = cloneBmpHeader(bmpImage->header);  // ERROR IN THIS FUNCTION!! 
     BMPImage * bmp2 = bytesToBmpImage((uint8_t *)bmpHeaderNew, bmpImage->data); 
     dumpBmpToFile(bmp2, "bin/out.bmp"); 
     free(bmpHeaderNew); 
