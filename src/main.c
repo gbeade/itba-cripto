@@ -27,22 +27,6 @@ void printBytes(uint8_t * vec, int bytes) {
     puts("");
 }
 
-void tryBmp(char * path) {
-    BMPMap * bmpMap = newBmpMap(path);
-    BMPImage * bmpImage = mapToBmpImage(bmpMap); 
-
-    // BMPHeader * bmpHeaderNew = bmpImage->header; 
-
-    BMPHeader * bmpHeaderNew = cloneBmpHeader(bmpImage->header);  // ERROR IN THIS FUNCTION!! 
-    BMPImage * bmp2 = bytesToBmpImage((uint8_t *)bmpHeaderNew, bmpImage->data); 
-    dumpBmpToFile(bmp2, "bin/out.bmp"); 
-    free(bmpHeaderNew); 
-
-    freeBmpImage(bmpImage); 
-    freeBmpMap(bmpMap); 
-    freeBmpImage(bmp2); 
-}
-
 void tryPolynomial() {
     printf("\nBeginning test poly\n"); 
 
@@ -180,6 +164,30 @@ void tryBmpShadow(char * path) {
     free(secretReconstructed); 
     freeBmpImage(bmp); 
     freeBmpMap(bmpMap); 
+}
+
+void tryBmp(char * path) {
+    BMPMap * bmpMap1 = newBmpMap(path);
+    BMPImage * bmpImage1 = mapToBmpImage(bmpMap1);
+
+    BMPMap * bmpMap2 = newBmpMap(path);
+    BMPImage * bmpImage2 = mapToBmpImage(bmpMap2); 
+
+    uint8_t * data = malloc(sizeof(uint8_t)*512*512); 
+    for (int i=0; i<512*512; i++) 
+            data[i] = (i+512)%7 ? 255 : 0;   
+
+    BMPImage * bmp = bytesToBmpImage((uint8_t *)bmpImage2->header, data); 
+    dumpBmpToFile(bmp, "bin/out.bmp"); 
+
+    freeBmpImage(bmpImage1); 
+    freeBmpImage(bmpImage2); 
+    freeBmpImage(bmp); 
+
+    free(data); 
+
+    freeBmpMap(bmpMap1); 
+    freeBmpMap(bmpMap2); 
 }
 
 int main() {
