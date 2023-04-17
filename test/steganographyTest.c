@@ -16,7 +16,7 @@ void testHidelsb4(CuTest *const cuTest) {
 void testHidelsb2(CuTest *const cuTest) {
     uint8_t secret[2] = {0xFF, 0x34};
     uint8_t original[8] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x1F };
-    lsb2Hide(secret, 4, original);
+    lsb2Hide(secret, 2, original);
     uint8_t answer[8] = {0x13, 0x13, 0x13, 0x13, 0x10, 0x13, 0x11, 0x1C };
     for (int i = 0 ; i< 8 ; i++) {
         CuAssertIntEquals(cuTest, original[i], answer[i]);
