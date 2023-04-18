@@ -67,7 +67,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
         BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
         fp[7] = i+'0'; 
         labelBmpImage(bmp, i);  /* Add the ID of the shadow in the reserved byte */
-        dumpBmpToFile(bmp, fp);
+        dumpBmpToFile(bmp, fp); /* Dump the file to an output */ // TODO: parametrize the output directory 
         freeBmpImage(bmp); 
     }
 
