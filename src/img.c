@@ -82,3 +82,49 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     freeBmpMap(mainMap); 
     free(byteShadows); 
 }
+
+void recover(char * shadowPath, char * imgPath) {
+
+    /* Load BMPs for shadow files */
+    BMPMap * shadowMaps[MAX_SHADOWS];
+    BMPImage * shadowImages[MAX_SHADOWS];  
+    int count = mapAllBmps(shadowPath, shadowMaps);
+
+    for (int i=0; i<count; i++) {
+        shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
+    }
+
+    /* Assume that the secret is shared by as many pictures as can be found */
+    int k = count; 
+
+    /* Take the first of all pictures as template, they are the same size */
+    int secretLength = shadowImages[0]->header->width * shadowImages[0]->header->height;  // Might be cause of error 
+
+    uint8_t ** byteShadows = malloc(sizeof(uint8_t*)*k);
+    int * ids = malloc(sizeof(int)*k);  
+    for (int i=0; i<k; i++) {
+        byteShadows[i] = malloc(sizeof(uint8_t)*secretLength/(k-1));
+        ids[i] = shadowImages[i]->header->reserved1;  
+        lsb4Show(shadowImages[i]->data, secretLength/(k-1), byteShadows[i]); 
+    }
+
+
+    /* We now have the shadows and the ids. Reconstruct the data array. */
+    uint8_t * secretBytes = reconstruct(byteShadows, ids, secretLength/(k-1), k);
+    
+    BMPImage * image = bytesToBmpImage((uint8_t *)shadowImages[0]->header, secretBytes); 
+    dumpBmpToFile(image, imgPath); 
+
+    /* Free resources and goodbye */
+    for (int i=0; i<count; i++) {
+        free(byteShadows[i]); 
+        freeBmpImage(shadowImages[i]); 
+        freeBmpMap(shadowMaps[i]);
+    } 
+
+    free(secretBytes); 
+    free(byteShadows); 
+    free(ids); 
+    freeBmpImage(image); 
+
+}
