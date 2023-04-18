@@ -60,11 +60,13 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     /* Generate the shadows for the main image */
     uint8_t ** byteShadows = generateShadows(mainImage->data, secretLength, k, count); 
 
+    /* For each shadow (i.e. an ary of bytes), hide it in ith image in the directory*/
     char fp[13] = {'b', 'i', 'n', '/', 'o', 'u', 't', ' ', '.', 'b', 'm', 'p', 0};
     for (int i=0; i<count; i++) {
-        lsb4Hide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data); 
-        BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data); 
+        lsb4Hide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data);  // TODO - change so that it chooses LSB4 or LSB2 
+        BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
         fp[7] = i+'0'; 
+        labelBmpImage(bmp, i);  /* Add the ID of the shadow in the reserved byte */
         dumpBmpToFile(bmp, fp);
         freeBmpImage(bmp); 
     }
