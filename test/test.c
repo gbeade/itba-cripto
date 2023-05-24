@@ -26,7 +26,7 @@ CuSuite * getSteganographySuiteTest(void) {
 	SUITE_ADD_TEST(suite, testHideAndShowlsb4);
 	SUITE_ADD_TEST(suite, testHidelsb2);
 	SUITE_ADD_TEST(suite, testHidelsb4);
-
+	SUITE_ADD_TEST(suite, testShowlsb4);
 
 	return suite;
 }

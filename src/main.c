@@ -191,12 +191,26 @@ void tryBmp(char * path) {
     freeBmpMap(bmpMap2); 
 }
 
+void dumpWhiteBmp() {
+    BMPMap * map = newBmpMap("final.bmp"); 
+    BMPImage * image = mapToBmpImage(map); 
+
+    for (int i=0; i<image->header->height*image->header->width; i++) {
+        image->data[i] = i % 512; 
+    }
+
+    dumpBmpToFile(image, "grey.bmp");
+}
+
+
 void tryComplete() {
-    distribute("samples/shadows", "samples/sample.bmp", 3);
-    recover("bin/shadows", "final.bmp");  
+    int k = 3; 
+    distribute("samples/shadows", "grey.bmp", k);
+    recover("bmp", "final.bmp", k);  
 }
 
 int main() {
-    tryComplete(); 
+    tryComplete();
+    // dumpWhiteBmp();
     return 0;
 }

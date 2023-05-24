@@ -61,7 +61,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     uint8_t ** byteShadows = generateShadows(mainImage->data, secretLength, k, count); 
 
     /* For each shadow (i.e. an ary of bytes), hide it in ith image in the directory */
-    char fp[13] = {'b', 'i', 'n', '/', 'o', 'u', 't', ' ', '.', 'b', 'm', 'p', 0};
+    char fp[13] = {'b', 'm', 'p', '/', 'o', 'u', 't', ' ', '.', 'b', 'm', 'p', 0};
     for (int i=0; i<count; i++) {
         lsb4Hide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data);  // TODO - change so that it chooses LSB4 or LSB2 
         BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
@@ -83,7 +83,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     free(byteShadows); 
 }
 
-void recover(char * shadowPath, char * imgPath) {
+void recover(char * shadowPath, char * imgPath, int k) {
 
     /* Load BMPs for shadow files */
     BMPMap * shadowMaps[MAX_SHADOWS];
@@ -94,13 +94,9 @@ void recover(char * shadowPath, char * imgPath) {
         shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
     }
 
-    /* Assume that the secret is shared by as many pictures as can be found */
-    int k = count; 
-
     /* Take the first of all pictures as template, they are the same size */
     int secretLength = shadowImages[0]->header->width * shadowImages[0]->header->height;  // Might be cause of error 
 
-    // Use LSB2 for debug
     uint8_t ** byteShadows = malloc(sizeof(uint8_t*)*k);
     int * ids = malloc(sizeof(int)*k);  
     for (int i=0; i<k; i++) {
@@ -109,7 +105,6 @@ void recover(char * shadowPath, char * imgPath) {
         lsb4Show(shadowImages[i]->data, secretLength/(k-1), byteShadows[i]); 
     }
 
-
     /* We now have the shadows and the ids. Reconstruct the data array. */
     uint8_t * secretBytes = reconstruct(byteShadows, ids, secretLength/(k-1), k);
     
@@ -117,8 +112,11 @@ void recover(char * shadowPath, char * imgPath) {
     dumpBmpToFile(image, imgPath); 
 
     /* Free resources and goodbye */
-    for (int i=0; i<count; i++) {
+    for (int i=0; i<k; i++) {
         free(byteShadows[i]); 
+    }
+
+    for (int i=0; i<count; i++) {
         freeBmpImage(shadowImages[i]); 
         freeBmpMap(shadowMaps[i]);
     } 
@@ -127,5 +125,4 @@ void recover(char * shadowPath, char * imgPath) {
     free(byteShadows); 
     free(ids); 
     freeBmpImage(image); 
-
 }
