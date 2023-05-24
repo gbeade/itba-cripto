@@ -192,25 +192,29 @@ void tryBmp(char * path) {
 }
 
 void dumpWhiteBmp() {
-    BMPMap * map = newBmpMap("final.bmp"); 
+    BMPMap * map = newBmpMap("samples/sample.bmp"); 
     BMPImage * image = mapToBmpImage(map); 
 
-    for (int i=0; i<image->header->height*image->header->width; i++) {
-        image->data[i] = i % 512; 
-    }
+    for (int i=0; i<image->header->height; i++)
+        for (int j=0; j<image->header->width; j++)
+            printf("%d\n", image->data[i*image->header->width+j]);
+            // image->data[i*image->header->width+j] = 50; 
 
-    dumpBmpToFile(image, "grey.bmp");
+
+    dumpBmpToFile(image, "251.bmp");
+    freeBmpImage(image); 
+    freeBmpMap(map); 
 }
 
 
 void tryComplete() {
     int k = 3; 
-    distribute("samples/shadows", "grey.bmp", k);
+    distribute("samples/shadows", "samples/sample.bmp", k);
     recover("bmp", "final.bmp", k);  
 }
 
 int main() {
     tryComplete();
-    // dumpWhiteBmp();
+    dumpWhiteBmp();
     return 0;
 }
