@@ -176,7 +176,7 @@ void testPolynomialInterpolation(CuTest *const cuTest) {
     /* Interpolate negative numbers - they circle back to positive numbers in Z251 */
     testQuadraticInterpolation(cuTest, 250, 250, 250, -5, -4, -3, -21, -13, -7);  
 
-    /* We test for quadratic by they are colinear, expect s3=0 */
+    /* We test for quadratic but they are colinear, expect s3=0 */
     testQuadraticInterpolation(cuTest, 0, 1, 0, 1, 2, 3, 1, 2, 3); 
 
 }

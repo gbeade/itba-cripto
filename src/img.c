@@ -51,7 +51,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     /* Load BMPs for shadow files */
     BMPMap * shadowMaps[MAX_SHADOWS];
     BMPImage * shadowImages[MAX_SHADOWS];  
-    int count = mapAllBmps(shadowPath, shadowMaps);
+    int count = mapAllBmps(shadowPath, shadowMaps); 
 
     for (int i=0; i<count; i++) {
         shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
@@ -60,7 +60,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     /* Generate the shadows for the main image */
     uint8_t ** byteShadows = generateShadows(mainImage->data, secretLength, k, count); 
 
-    /* For each shadow (i.e. an ary of bytes), hide it in ith image in the directory*/
+    /* For each shadow (i.e. an ary of bytes), hide it in ith image in the directory */
     char fp[13] = {'b', 'i', 'n', '/', 'o', 'u', 't', ' ', '.', 'b', 'm', 'p', 0};
     for (int i=0; i<count; i++) {
         lsb4Hide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data);  // TODO - change so that it chooses LSB4 or LSB2 
@@ -100,6 +100,7 @@ void recover(char * shadowPath, char * imgPath) {
     /* Take the first of all pictures as template, they are the same size */
     int secretLength = shadowImages[0]->header->width * shadowImages[0]->header->height;  // Might be cause of error 
 
+    // Use LSB2 for debug
     uint8_t ** byteShadows = malloc(sizeof(uint8_t*)*k);
     int * ids = malloc(sizeof(int)*k);  
     for (int i=0; i<k; i++) {

@@ -193,7 +193,7 @@ void tryBmp(char * path) {
 
 void tryComplete() {
     distribute("samples/shadows", "samples/sample.bmp", 3);
-    recover("samples/shadows", "final.bmp");  
+    recover("bin/shadows", "final.bmp");  
 }
 
 int main() {
