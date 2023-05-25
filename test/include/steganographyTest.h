@@ -6,9 +6,13 @@
 
 void testHidelsb2(CuTest *const cuTest);
 
+void testHidelsb2new(CuTest *const cuTest);
+
 void testHidelsb4(CuTest *const cuTest);
 
 void testHideAndShowlsb2(CuTest *const cuTest);
+
+void testHideAndShowlsb2new(CuTest *const cuTest);
 
 void testHideAndShowlsb4(CuTest *const cuTest);
 

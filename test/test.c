@@ -23,8 +23,10 @@ CuSuite * getSteganographySuiteTest(void) {
 	CuSuite *const suite = CuSuiteNew();
 
 	SUITE_ADD_TEST(suite, testHideAndShowlsb2);
+	SUITE_ADD_TEST(suite, testHideAndShowlsb2new);
 	SUITE_ADD_TEST(suite, testHideAndShowlsb4);
 	SUITE_ADD_TEST(suite, testHidelsb2);
+	SUITE_ADD_TEST(suite, testHidelsb2new);
 	SUITE_ADD_TEST(suite, testHidelsb4);
 
 
