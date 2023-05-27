@@ -65,7 +65,15 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
         Polynomial * fi = polyInterpolate(k, ids, ys1);
         Polynomial * gi = polyInterpolate(k, ids, ys2);
 
-        // TODO: check for cheating
+        int ai0 = fi->coefficients[0];
+        int ai1 = fi->coefficients[1]; 
+        int bi0 = gi->coefficients[0];
+        int bi1 = gi->coefficients[1];
+
+        // Check for Cheating
+        // if ( (bi1*INV(ai1))-(bi0*INV(ai0)) != 0)
+        //     printf("CHEATER\n"); 
+ 
 
         for (int t=0; t<k; t++) 
             secret[currentBlock*blockSize+t] = fi->coefficients[t];
