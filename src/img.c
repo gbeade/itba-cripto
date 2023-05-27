@@ -66,7 +66,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
         lsb4Hide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data);  // TODO - change so that it chooses LSB4 or LSB2 
         BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
         fp[7] = i+'0'; 
-        labelBmpImage(bmp, i);  /* Add the ID of the shadow in the reserved byte */
+        labelBmpImage(bmp, i+1);  /* Add the ID of the shadow in the reserved byte */
         dumpBmpToFile(bmp, fp); /* Dump the file to an output */ // TODO: parametrize the output directory 
         freeBmpImage(bmp); 
     }
@@ -101,7 +101,7 @@ void recover(char * shadowPath, char * imgPath, int k) {
     int * ids = malloc(sizeof(int)*k);  
     for (int i=0; i<k; i++) {
         byteShadows[i] = malloc(sizeof(uint8_t)*secretLength/(k-1));
-        ids[i] = shadowImages[i]->header->reserved1;  
+        ids[i] = shadowImages[i]->header->reserved1; 
         lsb4Show(shadowImages[i]->data, secretLength/(k-1), byteShadows[i]); 
     }
 

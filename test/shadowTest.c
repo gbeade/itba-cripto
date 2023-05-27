@@ -20,8 +20,6 @@ void testShadowGeneration(CuTest *const cuTest) {
     int shadowSize = secretLength / (k-1); 
     uint8_t originals[n][secretLength];
 
-   
-
     int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
 

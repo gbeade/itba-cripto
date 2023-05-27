@@ -5,6 +5,8 @@
 #include "../include/shadow.h"
 #include "../include/steganography.h"
 #include "../include/img.h"
+#include <time.h>
+
 
 
 void printBits(void const * const ptr, size_t const size)
@@ -191,17 +193,19 @@ void tryBmp(char * path) {
     freeBmpMap(bmpMap2); 
 }
 
-void dumpWhiteBmp() {
+void dumpDummyBmp() {
     BMPMap * map = newBmpMap("samples/sample.bmp"); 
     BMPImage * image = mapToBmpImage(map); 
 
-    for (int i=0; i<image->header->height; i++)
-        for (int j=0; j<image->header->width; j++)
-            printf("%d\n", image->data[i*image->header->width+j]);
-            // image->data[i*image->header->width+j] = 50; 
+    int height = image->header->height; 
+    int width = image->header->width; 
+
+    for (int i=0; i<height; i++)
+        for (int j=0; j<width; j++)
+            image->data[width*i+j] = 100;
 
 
-    dumpBmpToFile(image, "251.bmp");
+    dumpBmpToFile(image, "dummy.bmp");
     freeBmpImage(image); 
     freeBmpMap(map); 
 }
@@ -214,7 +218,11 @@ void tryComplete() {
 }
 
 int main() {
+    dumpDummyBmp();
     tryComplete();
-    dumpWhiteBmp();
+
+    // Seed the random number generator with current time
+    srand(time(NULL));
+
     return 0;
 }
