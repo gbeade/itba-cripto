@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../include/shadow.h"
 #include "../include/polynomial.h"
 
@@ -24,7 +25,7 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     for (int i=0; i<secretLength; i+=blockSize) {
         Polynomial * fi = polyFromBytes(k, &secret[i]); 
 
-        int ri = rand(); 
+        int ri = CONG(rand()); 
          
         uint8_t bi0 = CONG(-1*ri*secret[i]); 
         uint8_t bi1 = CONG(-1*ri*secret[i+1]);
@@ -54,6 +55,7 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
     uint8_t * secret = (uint8_t *) malloc(sizeof(uint8_t)*secretLength); 
 
     int currentBlock = 0; 
+    char flag = 0;
     for (int i=0; i<shadowLength; i+=2) {
         int ys1[k];
         int ys2[k]; 
@@ -71,9 +73,10 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
         int bi1 = gi->coefficients[1];
 
         // Check for Cheating
-        // if ( (bi1*INV(ai1))-(bi0*INV(ai0)) != 0)
-        //     printf("CHEATER\n"); 
- 
+        if ( (CONG(bi1*INV(ai1))-CONG(bi0*INV(ai0))) != 0 && !flag) {
+             printf("CHEATER\n"); 
+             flag++;
+        }
 
         for (int t=0; t<k; t++) 
             secret[currentBlock*blockSize+t] = fi->coefficients[t];
