@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "../include/shadow.h"
 #include "../include/polynomial.h"
 

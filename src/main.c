@@ -7,26 +7,6 @@
 #include "../include/shadow.h"
 #include "../include/steganography.h"
 
-void printBits(void const* const ptr, size_t const size) {
-    unsigned char* b = (unsigned char*)ptr;
-    unsigned char byte;
-    int i, j;
-
-    for (i = size - 1; i >= 0; i--) {
-        for (j = 7; j >= 0; j--) {
-            byte = (b[i] >> j) & 1;
-            printf("%u", byte);
-        }
-        printf(" ");
-    }
-}
-
-void printBytes(uint8_t* vec, int bytes) {
-    for (int i = 0; i < bytes; i++) {
-        printBits(vec + i, 1);
-    }
-    puts("");
-}
 
 void tryBmp(char* path) {
     BMPMap* bmpMap = newBmpMap(path);
@@ -183,13 +163,12 @@ enum {
     INPUT_PATH,
     OUTPUT_PATH,
     RECOVER_NUM,
-    DISTRIBUTE_NUM,
     NUM_ARGUMENTS,
     DISTRIBUTE,
     RECOVER
 };
 
-char* ARG_STRINGS[] = {"[-d | -r]", "-i", "-o", "-k", "-n"};
+char* ARG_STRINGS[] = {"[-d | -r]", "-i", "-o", "-k"};
 int main(int argc, char* argv[]) {
 
     void* args[NUM_ARGUMENTS] = {NULL};
@@ -203,7 +182,6 @@ int main(int argc, char* argv[]) {
                 "   -h                                     prints help and finish.\n"
                 "   -d                                     distribute a secret image throughout a set of images.\n"
                 "   -r                                     recover a secret image from a set of images.\n"
-                "   -n [number]                            specify the number of images to distribute the secret among.\n"
                 "   -k [number]                            specify the number of images needed to recover the secret image.\n"
                 "   -i [path]                              specify input path for secret image (a directory when using -r, a file when using -d).\n"
                 "   -o [path]                              specify output path for secret image (a file when using -r, a directory when using -d).\n"
@@ -249,7 +227,7 @@ int main(int argc, char* argv[]) {
 
     // Check that all arguments were provided
     for (i = 0; i < NUM_ARGUMENTS; i++) {
-        if (GET_CHARP(args, i) == NULL && !(i == DISTRIBUTE_NUM && GET_INT(args, MODE) == RECOVER)) {
+        if (GET_CHARP(args, i) == NULL) {
             printf("Error: Missing argument %s\n", ARG_STRINGS[i]);
             return 1;
         }
@@ -259,7 +237,6 @@ int main(int argc, char* argv[]) {
     printf("Mode: %lu\n", GET_INT(args, MODE));
     printf("Input File: %s\n", GET_CHARP(args, INPUT_PATH));
     printf("K: %s\n", GET_CHARP(args, RECOVER_NUM));
-    printf("N: %s\n", GET_CHARP(args, DISTRIBUTE_NUM));
     printf("Output path: %s\n", GET_CHARP(args, OUTPUT_PATH));
 
     uintptr_t mode = (int)GET_INT(args, MODE);
@@ -268,8 +245,7 @@ int main(int argc, char* argv[]) {
     char* output = GET_CHARP(args, OUTPUT_PATH);
 
     if (mode == DISTRIBUTE) {
-        int n = atoi(GET_CHARP(args, DISTRIBUTE_NUM));
-        distribute(output, input, n, k);
+        distribute(output, input, k);
     } else {
         recover(input, output, k);
     }
