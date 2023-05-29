@@ -51,12 +51,16 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     } else if (k <= 8){
         lsbHide = lsb2Hide;
     } else {
-        // handle error
+        // todo handle error
     }
     /* Load BMP for main image */
     BMPMap * mainMap = newBmpMap(imgPath); 
     BMPImage * mainImage = mapToBmpImage(mainMap);
     int secretLength = mainImage->header->width * mainImage->header->height;  // Might be cause of error 
+
+    if (secretLength % (2*k-2) != 0) {
+        // todo handle error
+    }
 
     /* Load BMPs for shadow files */
     BMPMap * shadowMaps[MAX_SHADOWS];
@@ -65,11 +69,11 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     int count = mapAllBmps(shadowPath, shadowMaps, shadowPaths); 
 
     if (count < k) {
-        // handle error
+        // todo handle error
     }
 
     for (int i=0; i<count; i++) {
-        shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
+        shadowImages[i] = mapToBmpImage(shadowMaps[i]); // todo should we check that image size is multiple of 2k-2?
     }
 
     /* Generate the shadows for the main image */
@@ -121,6 +125,10 @@ void recover(char * shadowPath, char * imgPath, int k) {
 
     /* Take the first of all pictures as template, they are the same size */
     int secretLength = shadowImages[0]->header->width * shadowImages[0]->header->height;  // Might be cause of error 
+
+    if (secretLength % (2*k - 2) != 0) {
+        // todo handle error. Should we check for every shadow?
+    }
 
     uint8_t ** byteShadows = malloc(sizeof(uint8_t*)*k);
     int * ids = malloc(sizeof(int)*k);  
