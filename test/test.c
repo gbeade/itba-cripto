@@ -2,6 +2,7 @@
 
 #include "include/cuTest.h"
 #include "include/polynomialTest.h"
+#include "include/shadowTest.h"
 #include "include/steganographyTest.h"
 #include <stdlib.h>
 
@@ -28,6 +29,16 @@ CuSuite * getSteganographySuiteTest(void) {
 	SUITE_ADD_TEST(suite, testHidelsb2);
 	SUITE_ADD_TEST(suite, testHidelsb2new);
 	SUITE_ADD_TEST(suite, testHidelsb4);
+	SUITE_ADD_TEST(suite, testShowlsb4);
+
+	return suite;
+}
+
+CuSuite * getShadowSuiteTest(void) {
+	CuSuite *const suite = CuSuiteNew();
+
+	SUITE_ADD_TEST(suite, testShadowGeneration);
+	SUITE_ADD_TEST(suite, testShadowGenerationMod);
 
 
 	return suite;
@@ -39,8 +50,12 @@ void runAllTests(void) {
 
 	CuSuite * polynomialSuite = getPolynomialSuiteTest(); 
 	CuSuite * steganographySuite = getSteganographySuiteTest(); 
+	CuSuite * shadowSuite = getShadowSuiteTest(); 
+
 	CuSuiteAddSuite(suite, polynomialSuite);
 	CuSuiteAddSuite(suite, steganographySuite);
+	CuSuiteAddSuite(suite, shadowSuite);
+
 
 	CuSuiteRun(suite);
 
@@ -51,6 +66,7 @@ void runAllTests(void) {
 
 	CuStringDelete(output); 
 	CuSuiteDelete(steganographySuite);
+	CuSuiteDelete(shadowSuite);
 	CuSuiteDelete(polynomialSuite);
 	free(suite); 
 }

@@ -13,6 +13,19 @@ void testHidelsb4(CuTest *const cuTest) {
     }
 }
 
+void testShowlsb4(CuTest *const cuTest) {
+    uint8_t offuscated[8] = {0x1B, 0x1E, 0x1A, 0x1D, 0x1E, 0x1B, 0x1E, 0x1A};
+    uint8_t hide[4]; 
+
+    lsb4Show(offuscated, 4, hide);
+
+    CuAssertIntEquals(cuTest, hide[0], 0xBE);
+    CuAssertIntEquals(cuTest, hide[1], 0xAD);
+    CuAssertIntEquals(cuTest, hide[2], 0xEB);
+    CuAssertIntEquals(cuTest, hide[3], 0xEA);
+}
+
+
 void testHidelsb2(CuTest *const cuTest) {
     uint8_t secret[2] = {0xFF, 0x34};
     uint8_t original[8] = {0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x1F };

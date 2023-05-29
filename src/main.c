@@ -6,23 +6,13 @@
 #include "../include/polynomial.h"
 #include "../include/shadow.h"
 #include "../include/steganography.h"
+#include "../include/img.h"
+#include <time.h>
 
 
-void tryBmp(char* path) {
-    BMPMap* bmpMap = newBmpMap(path);
-    BMPImage* bmpImage = mapToBmpImage(bmpMap);
 
-    // BMPHeader * bmpHeaderNew = bmpImage->header;
 
-    BMPHeader* bmpHeaderNew = cloneBmpHeader(bmpImage->header); // ERROR IN THIS FUNCTION!!
-    BMPImage* bmp2 = bytesToBmpImage((uint8_t*)bmpHeaderNew, bmpImage->data);
-    dumpBmpToFile(bmp2, "bin/out.bmp");
-    free(bmpHeaderNew);
 
-    freeBmpImage(bmpImage);
-    freeBmpMap(bmpMap);
-    freeBmpImage(bmp2);
-}
 
 void tryPolynomial() {
     printf("\nBeginning test poly\n");
@@ -233,12 +223,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    // Print out the parsed arguments
-    printf("Mode: %lu\n", GET_INT(args, MODE));
-    printf("Input File: %s\n", GET_CHARP(args, INPUT_PATH));
-    printf("K: %s\n", GET_CHARP(args, RECOVER_NUM));
-    printf("Output path: %s\n", GET_CHARP(args, OUTPUT_PATH));
-
     uintptr_t mode = (int)GET_INT(args, MODE);
     int k = atoi(GET_CHARP(args, RECOVER_NUM));
     char* input = GET_CHARP(args, INPUT_PATH);
@@ -249,5 +233,61 @@ int main(int argc, char* argv[]) {
     } else {
         recover(input, output, k);
     }
-    return 0;
+
 }
+void tryBmp(char * path) {
+    BMPMap * bmpMap1 = newBmpMap(path);
+    BMPImage * bmpImage1 = mapToBmpImage(bmpMap1);
+
+    BMPMap * bmpMap2 = newBmpMap(path);
+    BMPImage * bmpImage2 = mapToBmpImage(bmpMap2); 
+
+    uint8_t * data = malloc(sizeof(uint8_t)*512*512); 
+    for (int i=0; i<512*512; i++) 
+            data[i] = (i+512)%7 ? 255 : 0;   
+
+    BMPImage * bmp = bytesToBmpImage((uint8_t *)bmpImage2->header, data); 
+    dumpBmpToFile(bmp, "bin/out.bmp"); 
+
+    freeBmpImage(bmpImage1); 
+    freeBmpImage(bmpImage2); 
+    freeBmpImage(bmp); 
+    free(data); 
+
+    freeBmpMap(bmpMap1); 
+    freeBmpMap(bmpMap2); 
+}
+
+void dumpDummyBmp() {
+    BMPMap * map = newBmpMap("samples/sample.bmp"); 
+    BMPImage * image = mapToBmpImage(map); 
+
+    int height = image->header->height; 
+    int width = image->header->width; 
+
+    for (int i=0; i<height; i++)
+        for (int j=0; j<width; j++)
+            image->data[width*i+j] = 100;
+
+
+    dumpBmpToFile(image, "dummy.bmp");
+    freeBmpImage(image); 
+    freeBmpMap(map); 
+}
+
+
+void tryComplete() {
+    int k = 3; 
+    distribute("samples/shadows", "samples/sample.bmp", k);
+    recover("bmp", "final.bmp", k);  
+}
+
+// int main() {
+//     dumpDummyBmp();
+//     tryComplete();
+
+//     // Seed the random number generator with current time
+//     srand(time(NULL));
+
+//     return 0;
+// }

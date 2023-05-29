@@ -3,6 +3,7 @@
 
 # Compiled binaries
 bin/
+bmp/
 
 # Visual Studio Code
 .vscode/

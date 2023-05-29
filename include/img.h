@@ -5,4 +5,4 @@ void recover(char * shadowPath, char * imgPath, int k);
 
 void distribute(char * shadowPath, char * imgPath, int k);
 
-#endif 
+#endif // IMG_H
