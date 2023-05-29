@@ -108,7 +108,7 @@ void recover(char * shadowPath, char * imgPath, int k) {
     } else if (k<= 8){
         lsbShow = lsb2Show;
     } else {
-        // handle error
+        // todo handle error
     }
     /* Load BMPs for shadow files */
     BMPMap * shadowMaps[MAX_SHADOWS];
@@ -116,7 +116,7 @@ void recover(char * shadowPath, char * imgPath, int k) {
     int count = mapAllBmps(shadowPath, shadowMaps, NULL);
 
     if (count < k) {
-        // handle error
+        // todo handle error
     }
 
     for (int i=0; i<k; i++) {
