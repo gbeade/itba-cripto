@@ -29,11 +29,21 @@ static int mapAllBmps(char * shadowPath, BMPMap ** maps, char shadowPaths[][256]
 
     int count = 0;
     while ((entry = readdir(dir)) != NULL) {
+        // TODO - sacar el strcpy
         char filePath[MAX_FILEPATH];
+        
         sprintf(filePath, "%s/%s", shadowPath, entry->d_name);
         if (stat(filePath, &fileStat) >= 0 && S_ISREG(fileStat.st_mode)) {
-            if (shadowPaths != NULL)
-                strcpy(shadowPaths[count], filePath);
+            if (shadowPaths != NULL) {
+               strcpy(shadowPaths[count], filePath);
+               int len = strlen(shadowPaths[count]);
+               shadowPaths[count][len-4] = '2';  
+               shadowPaths[count][len-3] = '.';  
+               shadowPaths[count][len-2] = 'b';  
+               shadowPaths[count][len-1] = 'm';  
+               shadowPaths[count][len] = 'p';  
+               shadowPaths[count][len+1] = '\0';  
+            }
             maps[count++] = newBmpMap(filePath); 
         }
     }
@@ -53,7 +63,8 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     } else {
         // todo handle error
     }
-    /* Load BMP for main image */
+
+    // /* Load BMP for main image */
     BMPMap * mainMap = newBmpMap(imgPath); 
     BMPImage * mainImage = mapToBmpImage(mainMap);
     int secretLength = mainImage->header->width * mainImage->header->height;  // Might be cause of error 
@@ -66,7 +77,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     BMPMap * shadowMaps[MAX_SHADOWS];
     char shadowPaths[MAX_SHADOWS][256];
     BMPImage * shadowImages[MAX_SHADOWS];  
-    int count = mapAllBmps(shadowPath, shadowMaps, shadowPaths); 
+    int count = mapAllBmps(shadowPath, shadowMaps, shadowPaths);
 
     if (count < k) {
         // todo handle error

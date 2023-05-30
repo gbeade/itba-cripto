@@ -22,6 +22,7 @@ void labelBmpImage(BMPImage * bmp, uint16_t label){
 }
 
 BMPMap * newBmpMap(const char* path) {
+
     int fd = open(path, O_RDONLY);
     if (fd == -1) {
         perror("open");
@@ -34,7 +35,7 @@ BMPMap * newBmpMap(const char* path) {
         close(fd);
         return NULL;
     }
-    
+
     uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
     if (map == MAP_FAILED) {
         perror("mmap");
@@ -59,7 +60,7 @@ BMPMap * newBmpMap(const char* path) {
 
     BMPMap * bmpMap = malloc(sizeof(BMPMap));
     bmpMap->map = map; 
-
+    bmpMap->fd = fd; 
     return bmpMap;
 }
 
@@ -129,9 +130,12 @@ void dumpBmp(BMPImage* bmp){
 
 /* Dumps all bytes of a BMPImage into a file in specified path. If it doesn't exist, the file is created. */
 void dumpBmpToFile(BMPImage * bmp, char * path){
+
+    printf("%s\n", path); 
     // Open file for writing
     FILE* file = fopen(path, "wb");
     if (file == NULL) {
+        printf("ERROR\n"); 
         fprintf(stderr, "Error: could not open file for writing\n");
         return;
     }
@@ -167,6 +171,7 @@ void freeBmpImage(BMPImage * bmpImage) {
 
 void freeBmpMap(BMPMap * bmpMap) {
     munmap(bmpMap->map, ((BMPHeader *)bmpMap->map)->file_size);
+    close(bmpMap->fd); 
     free(bmpMap);
 }
 

@@ -24,6 +24,7 @@ typedef struct  __attribute__((__packed__)) BMPHeader {
 
 typedef struct BMPMap {
     uint8_t * map;  // Memory-mapped array of bytes that represent a .bmp
+    int fd; 
 } BMPMap; 
 
 typedef struct BMPImage {
