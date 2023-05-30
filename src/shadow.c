@@ -84,8 +84,6 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
         // Check for Cheating
         if ( isCheating(ai0, ai1, bi0, bi1) && !flag) {
              printf("CHEATER\n");
-
-    printf("ai0 = %d, ai1 = %d, bi0 = %d, bi1 = %d\n", ai0, ai1, bi0, bi1);
              flag++;
         }
 
