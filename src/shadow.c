@@ -25,9 +25,9 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     for (int i=0; i<secretLength; i+=blockSize) {
         Polynomial * fi = polyFromBytes(k, &secret[i]); 
 
-        int ri = CONG(rand()); 
+        int ri = CONG(rand());
          
-        uint8_t bi0 = CONG(-1*ri*secret[i]); 
+        uint8_t bi0 = CONG(-1*ri*secret[i]);
         uint8_t bi1 = CONG(-1*ri*secret[i+1]);
         Polynomial * gi = polyFromBytes(k, &secret[i+k-2]);
         gi->coefficients[0] = bi0; 
@@ -48,8 +48,17 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
 }
 
 
-uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
+static int isCheating(int ai0, int ai1, int bi0, int bi1) {
+    for (int i=0 ; i< MOD ; i++) {
+        if (CONG(ai0*i + bi0) == 0 && CONG(ai1*i + bi1) == 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
 
+
+uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
     int secretLength = shadowLength*(k-1); 
     int blockSize = 2*k - 2;
     uint8_t * secret = (uint8_t *) malloc(sizeof(uint8_t)*secretLength); 
@@ -73,8 +82,10 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
         int bi1 = gi->coefficients[1];
 
         // Check for Cheating
-        if ( (CONG(bi1*INV(ai1))-CONG(bi0*INV(ai0))) != 0 && !flag) {
+        if ( isCheating(ai0, ai1, bi0, bi1) && !flag) {
              printf("CHEATER\n");
+
+    printf("ai0 = %d, ai1 = %d, bi0 = %d, bi1 = %d\n", ai0, ai1, bi0, bi1);
              flag++;
         }
 

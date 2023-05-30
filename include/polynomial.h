@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define MOD 251
-#define CONG(x) ( (x) < 0 ? (((x)*(-1)*(MOD-1))%MOD) : (x%MOD))  // Write a number as a positive residue in MOD congruency
+#define CONG(x) ( (x) < 0 ? (((x)*(-1)*(MOD-1))%MOD) : ((x)%MOD))  // Write a number as a positive residue in MOD congruency
 #define INV(x) ( inverses[CONG(x)] )   // Recover the multiplicative inverse in MOD congruency
 
 
