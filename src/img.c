@@ -119,7 +119,7 @@ void recover(char * shadowPath, char * imgPath, int k) {
         // todo handle error
     }
 
-    for (int i=0; i<k; i++) {
+    for (int i=0; i<count; i++) {
         shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
     }
 
