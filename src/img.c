@@ -44,7 +44,7 @@ static int mapAllBmps(char * shadowPath, BMPMap ** maps, char shadowPaths[][256]
 }
 
 void distribute(char * shadowPath, char * imgPath, int k) {
-     uint8_t * (* lsbHide)(uint8_t * secret, int secretLength, uint8_t * original);
+    uint8_t * (* lsbHide)(uint8_t * secret, int secretLength, uint8_t * original);
 
     if (k >= 3 && k <= 4) {
         lsbHide = lsb4Hide;
