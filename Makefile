@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic -std=c99 -fsanitize=address
+CFLAGS = -Wall -Wextra -pedantic -std=c99 # -fsanitize=address
 LDFLAGS = -lm
 
 INCLUDE_DIR = include
