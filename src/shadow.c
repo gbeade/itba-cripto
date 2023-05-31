@@ -25,10 +25,13 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     for (int i=0; i<secretLength; i+=blockSize) {
         Polynomial * fi = polyFromBytes(k, &secret[i]); 
 
-        int ri = CONG(rand());
-         
-        uint8_t bi0 = CONG(-1*ri*secret[i]);
-        uint8_t bi1 = CONG(-1*ri*secret[i+1]);
+        int ri = CONG(1 + rand() % (MOD-1));
+        int a0 = secret[i] ? secret[i] : 1; 
+        int a1 = secret[i+1] ? secret[i+1] : 1; 
+
+
+        uint8_t bi0 = CONG(-1*ri*a0);
+        uint8_t bi1 = CONG(-1*ri*a1);
         Polynomial * gi = polyFromBytes(k, &secret[i+k-2]);
         gi->coefficients[0] = bi0; 
         gi->coefficients[1] = bi1;
@@ -49,6 +52,8 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
 
 
 static int isCheating(int ai0, int ai1, int bi0, int bi1) {
+    ai0 = ai0 ? ai0 : 1; 
+    ai1 = ai1 ? ai1 : 1; 
     for (int i=0 ; i< MOD ; i++) {
         if (CONG(ai0*i + bi0) == 0 && CONG(ai1*i + bi1) == 0) {
             return 0;

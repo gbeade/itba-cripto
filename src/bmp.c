@@ -177,7 +177,6 @@ void freeBmpMap(BMPMap * bmpMap) {
 
 void syncBmp(BMPMap * bmpMap, int size) {
     int result = msync(bmpMap->map, size, MS_SYNC);
-    printf("result %d\n", result); 
     if (result == -1) {
         perror("Error in msync");
         // Handle the error
