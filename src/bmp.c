@@ -23,7 +23,7 @@ void labelBmpImage(BMPImage * bmp, uint16_t label){
 
 BMPMap * newBmpMap(const char* path) {
 
-    int fd = open(path, O_RDWR);
+    int fd = open(path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         return NULL;
@@ -36,7 +36,7 @@ BMPMap * newBmpMap(const char* path) {
         return NULL;
     }
 
-    uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
     if (map == MAP_FAILED) {
         perror("mmap");
         close(fd);
@@ -131,6 +131,7 @@ void dumpBmp(BMPImage* bmp){
 /* Dumps all bytes of a BMPImage into a file in specified path. If it doesn't exist, the file is created. */
 void dumpBmpToFile(BMPImage * bmp, char * path){
 
+    printf("%s\n", path); 
     // Open file for writing
     FILE* file = fopen(path, "wb");
     if (file == NULL) {
@@ -163,16 +164,6 @@ void dumpBmpToFile(BMPImage * bmp, char * path){
     // Close file
     fclose(file);
 }
-
-void syncBmp(BMPMap * bmpMap, int size) {
-    int result = msync(bmpMap->map, size, MS_SYNC);
-    printf("result %d\n", result); 
-    if (result == -1) {
-        perror("Error in msync");
-        // Handle the error
-    }
-}
-
 
 void freeBmpImage(BMPImage * bmpImage) {
     free(bmpImage); 
