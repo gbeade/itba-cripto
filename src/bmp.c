@@ -175,6 +175,15 @@ void freeBmpMap(BMPMap * bmpMap) {
     free(bmpMap);
 }
 
+void syncBmp(BMPMap * bmpMap, int size) {
+    int result = msync(bmpMap->map, size, MS_SYNC);
+    printf("result %d\n", result); 
+    if (result == -1) {
+        perror("Error in msync");
+        // Handle the error
+    }
+}
+
 void debugBmp(BMPImage * bmp) {
     printf("Image dimensions: %dx%d\n", bmp->header->width, bmp->header->height);
     printf("Bits per pixel: %d\n", bmp->header->bits_per_pixel);

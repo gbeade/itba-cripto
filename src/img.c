@@ -94,6 +94,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     for (int i=0; i<count; i++) {
         lsbHide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data); 
         labelBmpImage(shadowImages[i], i+1);  /* Add the ID of the shadow in the reserved byte */
+        syncBmp(shadowImages[i], shadowImages[i]->header->file_size); // Optional
     }
 
     /* Free resources and goodbye */

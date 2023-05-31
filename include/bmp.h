@@ -60,6 +60,9 @@ void dumpBmpToFile(BMPImage * bmp, char * path);
 /* Dumps all bytes of a BMPImage into stdout. It can be piped into a file. */
 void dumpBmp(BMPImage* bmp); 
 
+/* Force a flush to disk of the map */
+void syncBmp(BMPMap * bmpMap, int size); 
+
 
 
 /* BMP MANIPULATION */
