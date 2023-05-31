@@ -93,10 +93,7 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     /* For each shadow (i.e. an ary of bytes), hide it in ith image in the directory */
     for (int i=0; i<count; i++) {
         lsbHide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data); 
-        BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
         labelBmpImage(shadowImages[i], i+1);  /* Add the ID of the shadow in the reserved byte */
-        // dumpBmpToFile(bmp, shadowPaths[i]); /* Dump the file to an output */ 
-        freeBmpImage(bmp); 
     }
 
     /* Free resources and goodbye */

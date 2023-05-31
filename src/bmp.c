@@ -23,7 +23,7 @@ void labelBmpImage(BMPImage * bmp, uint16_t label){
 
 BMPMap * newBmpMap(const char* path) {
 
-    int fd = open(path, O_RDONLY);
+    int fd = open(path, O_RDWR);
     if (fd == -1) {
         perror("open");
         return NULL;
@@ -36,7 +36,7 @@ BMPMap * newBmpMap(const char* path) {
         return NULL;
     }
 
-    uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+    uint8_t * map = (uint8_t*) mmap(NULL, file_stat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (map == MAP_FAILED) {
         perror("mmap");
         close(fd);
