@@ -192,4 +192,5 @@ void debugBmp(BMPImage * bmp) {
     printf("Header size: %d\n", bmp->header->header_size);
     printf("Planes: %d\n", bmp->header->planes);
     printf("Compression method: %d\n", bmp->header->compression_method);
+    printf("r1: %d\n", bmp->header->reserved1);
 }

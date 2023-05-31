@@ -94,8 +94,8 @@ void distribute(char * shadowPath, char * imgPath, int k) {
     for (int i=0; i<count; i++) {
         lsbHide(byteShadows[i], secretLength/(k-1), shadowImages[i]->data); 
         BMPImage * bmp = bytesToBmpImage((uint8_t *)mainImage->header, shadowImages[i]->data);
-        labelBmpImage(bmp, i+1);  /* Add the ID of the shadow in the reserved byte */
-        dumpBmpToFile(bmp, shadowPaths[i]); /* Dump the file to an output */ 
+        labelBmpImage(shadowImages[i], i+1);  /* Add the ID of the shadow in the reserved byte */
+        // dumpBmpToFile(bmp, shadowPaths[i]); /* Dump the file to an output */ 
         freeBmpImage(bmp); 
     }
 
@@ -132,6 +132,7 @@ void recover(char * shadowPath, char * imgPath, int k) {
 
     for (int i=0; i<count; i++) {
         shadowImages[i] = mapToBmpImage(shadowMaps[i]); 
+        debugBmp(shadowImages[i]);
     }
 
     /* Take the first of all pictures as template, they are the same size */
