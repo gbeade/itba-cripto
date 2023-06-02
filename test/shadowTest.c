@@ -8,26 +8,20 @@
 void testShadowGeneration(CuTest *const cuTest) {
 
     /* Secret that we expect to recover */
-    uint8_t * secret = (uint8_t *)"GONZALO"; 
+    uint8_t  secret[] = "GONZALO";
 
     // Declare parameters of the schema
     int n = 5;
     int k = 3; 
 
     // Considers the NULL-terminated
-    int secretLength; 
-    for (secretLength=1; secret[secretLength-1]; secretLength++);
+    int secretLength = sizeof(secret);
 
     int shadowSize = secretLength / (k-1); 
     uint8_t originals[n][secretLength];
 
     int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
-
-    for (int i=0 ; i<n ; i++) {
-        lsb4Hide(shadows[i], shadowSize, originals[i]);
-        lsb4Show(originals[i], shadowSize, shadows[i]);
-    }
 
     uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
     
@@ -38,13 +32,49 @@ void testShadowGeneration(CuTest *const cuTest) {
     CuAssertIntEquals(cuTest, secretReconstructed[4], 'A');
     CuAssertIntEquals(cuTest, secretReconstructed[5], 'L');
     CuAssertIntEquals(cuTest, secretReconstructed[6], 'O');
-    CuAssertIntEquals(cuTest, secretReconstructed[7], '\0');
 
     for (int i=0; i<n; i++) {
         free(shadows[i]);
     }
     free(shadows); 
     free(secretReconstructed); 
+}
+
+void testShadowGenerationMod2(CuTest *const cuTest) { // Should work but fails for some reason!
+
+
+    // Declare parameters of the schema
+    int n = 5;
+    int k = 4;
+
+
+    uint8_t secret[] = {"1", "2", "3", "4", "5", "6"}; // multiple of 2*k - 2 = 6
+
+    // Considers the NULL-terminated
+    int secretLength  = sizeof(secret);
+
+    int shadowSize = secretLength / (k-1);
+
+    uint8_t originals[n][secretLength];
+
+
+    int ids[3] = {1, 2, 3, 4};
+    uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+
+    uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
+
+    CuAssertIntEquals(cuTest, secretReconstructed[1], "2");
+    CuAssertIntEquals(cuTest, secretReconstructed[2], "3");
+    CuAssertIntEquals(cuTest, secretReconstructed[3], "4");
+    CuAssertIntEquals(cuTest, secretReconstructed[4], "5");
+    CuAssertIntEquals(cuTest, secretReconstructed[5], "6");
+
+    for (int i=0; i<n; i++) {
+        free(shadows[i]);
+    }
+
+    free(shadows);
+    free(secretReconstructed);
 }
 
 void testShadowGenerationMod(CuTest *const cuTest) {

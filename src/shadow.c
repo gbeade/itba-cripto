@@ -23,21 +23,24 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     // dealer divides secret into t-non-overlapping 2k−2-pixel blocks, B1, B2, ..., Bt. 
     int shadowByteCounter = 0; 
     for (int i=0; i<secretLength; i+=blockSize) {
-        Polynomial * fi = polyFromBytes(k, &secret[i]); 
-
-        int ri = CONG(1 + rand() % (MOD-1));
         int ai0Backup = secret[i];
         int ai1Backup = secret[i+1];
-         secret[i]=secret[i] ? secret[i] : 1;
-         secret[i+1] = secret[i+1] ? secret[i+1] : 1;
 
+        secret[i]=CONG(secret[i]) ? secret[i] : 1;
+        secret[i+1] = CONG(secret[i+1]) ? secret[i+1] : 1;
+
+        Polynomial * fi = polyFromBytes(k, &secret[i]);
+
+        int ri = CONG(1 + rand() % (MOD-1));
 
         uint8_t bi0 = CONG(-1*ri*secret[i]);
         uint8_t bi1 = CONG(-1*ri*secret[i+1]);
+
         Polynomial * gi = polyFromBytes(k, &secret[i+k-2]);
         gi->coefficients[0] = bi0; 
         gi->coefficients[1] = bi1;
 
+        // Restore ai0 and ai1 to avoid modifying original image
         secret[i] = ai0Backup;
         secret[i+1] = ai1Backup;
 

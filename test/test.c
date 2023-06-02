@@ -40,6 +40,7 @@ CuSuite * getShadowSuiteTest(void) {
 
 	SUITE_ADD_TEST(suite, testShadowGeneration);
 	SUITE_ADD_TEST(suite, testShadowGenerationMod);
+	SUITE_ADD_TEST(suite, testShadowGenerationMod2);
 
 
 	return suite;
@@ -55,7 +56,7 @@ void runAllTests(void) {
 
 	CuSuiteAddSuite(suite, polynomialSuite);
 	CuSuiteAddSuite(suite, steganographySuite);
-	// CuSuiteAddSuite(suite, shadowSuite); TODO arreglar el test
+	CuSuiteAddSuite(suite, shadowSuite);
 
 
 	CuSuiteRun(suite);
