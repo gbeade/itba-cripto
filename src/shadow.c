@@ -23,18 +23,26 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
     // dealer divides secret into t-non-overlapping 2k−2-pixel blocks, B1, B2, ..., Bt. 
     int shadowByteCounter = 0; 
     for (int i=0; i<secretLength; i+=blockSize) {
-        Polynomial * fi = polyFromBytes(k, &secret[i]); 
+        int ai0Backup = secret[i];
+        int ai1Backup = secret[i+1];
+
+        secret[i]=CONG(secret[i]) ? secret[i] : 1;
+        secret[i+1] = CONG(secret[i+1]) ? secret[i+1] : 1;
+
+        Polynomial * fi = polyFromBytes(k, &secret[i]);
 
         int ri = CONG(1 + rand() % (MOD-1));
-        int a0 = secret[i] ? secret[i] : 1; 
-        int a1 = secret[i+1] ? secret[i+1] : 1; 
 
+        uint8_t bi0 = CONG(-1*ri*secret[i]);
+        uint8_t bi1 = CONG(-1*ri*secret[i+1]);
 
-        uint8_t bi0 = CONG(-1*ri*a0);
-        uint8_t bi1 = CONG(-1*ri*a1);
         Polynomial * gi = polyFromBytes(k, &secret[i+k-2]);
         gi->coefficients[0] = bi0; 
         gi->coefficients[1] = bi1;
+
+        // Restore ai0 and ai1 to avoid modifying original image
+        secret[i] = ai0Backup;
+        secret[i+1] = ai1Backup;
 
         for (int j=0; j<n; j++) {
             shadows[j][shadowByteCounter] = polyEvaluate(fi, j+1);
@@ -52,8 +60,6 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
 
 
 static int isCheating(int ai0, int ai1, int bi0, int bi1) {
-    ai0 = ai0 ? ai0 : 1; 
-    ai1 = ai1 ? ai1 : 1; 
     for (int i=0 ; i< MOD ; i++) {
         if (CONG(ai0*i + bi0) == 0 && CONG(ai1*i + bi1) == 0) {
             return 0;

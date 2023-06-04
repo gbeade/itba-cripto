@@ -28,6 +28,7 @@ CuSuite * getSteganographySuiteTest(void) {
 	SUITE_ADD_TEST(suite, testHideAndShowlsb4);
 	SUITE_ADD_TEST(suite, testHidelsb2);
 	SUITE_ADD_TEST(suite, testHidelsb2new);
+	SUITE_ADD_TEST(suite, testHidelsb2New2);
 	SUITE_ADD_TEST(suite, testHidelsb4);
 	SUITE_ADD_TEST(suite, testShowlsb4);
 
@@ -39,6 +40,7 @@ CuSuite * getShadowSuiteTest(void) {
 
 	SUITE_ADD_TEST(suite, testShadowGeneration);
 	SUITE_ADD_TEST(suite, testShadowGenerationMod);
+	SUITE_ADD_TEST(suite, testShadowGenerationMod2);
 
 
 	return suite;

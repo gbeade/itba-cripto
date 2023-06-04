@@ -41,8 +41,7 @@ int main(int argc, char* argv[]) {
                 "   -k [number]                            specify the number of images needed to recover the secret image.\n"
                 "   -i [path]                              specify input path for secret image (a directory when using -r, a file when using -d).\n"
                 "   -o [path]                              specify output path for secret image (a file when using -r, a directory when using -d).\n"
-                "\n",
-                argv[0]);
+                ,argv[0]);
         return 1;
     }
 

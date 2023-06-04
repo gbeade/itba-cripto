@@ -7,6 +7,7 @@
 /* Test shadow generation*/
 void testShadowGeneration(CuTest *const cuTest); 
 void testShadowGenerationMod(CuTest *const cuTest); 
+void testShadowGenerationMod2(CuTest *const cuTest);
 
 
 

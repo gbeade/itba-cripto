@@ -8,6 +8,8 @@ void testHidelsb2(CuTest *const cuTest);
 
 void testHidelsb2new(CuTest *const cuTest);
 
+void testHidelsb2New2(CuTest *const cuTest);
+
 void testHidelsb4(CuTest *const cuTest);
 
 void testShowlsb4(CuTest *const cuTest);
