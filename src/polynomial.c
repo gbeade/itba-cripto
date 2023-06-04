@@ -72,7 +72,7 @@ void polyFree(Polynomial* poly) {
 }
 
 Polynomial* polyInterpolate(int n, int* xs, int* ys) {
-   
+
     Polynomial* poly = (Polynomial*) malloc(sizeof(Polynomial));
     poly->degree = n - 1;
     poly->coefficients = (uint8_t*) malloc(n * sizeof(uint8_t));
@@ -97,13 +97,14 @@ Polynomial* polyInterpolate(int n, int* xs, int* ys) {
 
             // II) Calculate Li(0)
             int li = 1; 
-            for (int j=0; j<top; j++) 
+            for (int j=0; j<top; j++) {
                 li *= i == j ? 1 : CONG(-1*xs[j]*INV(xs[i]-xs[j]));
-            
+                li = CONG(li); 
+            }
+                        
             // Sum to the current coefficient 
             currentCoefficient += CONG(y*li);
         }
-
         poly->coefficients[qc++] = (uint8_t)CONG(currentCoefficient); 
     }
 
