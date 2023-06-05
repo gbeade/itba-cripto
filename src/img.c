@@ -179,6 +179,15 @@ void recover(char* shadowPath, char* imgPath, int k) {
     /* We now have the shadows and the ids. Reconstruct the data array. */
     uint8_t* secretBytes = reconstruct(byteShadows, ids, secretLength / (k - 1), k);
 
+    if (secretBytes == NULL) {
+        fprintf(stderr, "Error: could not reconstruct image\n");
+        freeShadowImages(shadowImages, shadowMaps, count);
+        for (int i = 0; i < k; i++) {
+            free(byteShadows[i]);
+        }
+        return;
+    }
+
     BMPImage* image = bytesToBmpImage((uint8_t*)shadowImages[0]->header, secretBytes);
     dumpBmpToFile(image, imgPath);
 
