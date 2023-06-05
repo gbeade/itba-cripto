@@ -40,7 +40,7 @@ CuSuite * getShadowSuiteTest(void) {
 
 	SUITE_ADD_TEST(suite, testShadowGeneration);
 	SUITE_ADD_TEST(suite, testShadowGenerationMod);
-	SUITE_ADD_TEST(suite, testShadowGenerationMod2);
+	SUITE_ADD_TEST(suite, testAllK);
 
 
 	return suite;

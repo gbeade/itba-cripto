@@ -12,7 +12,7 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
 
     int blockSize = 2*k - 2;
     int shadowSize = secretLength / (k-1);  
-    if (k < KMIN || k > KMAX || secretLength % blockSize != 0)
+    if (k < KMIN || k > KMAX || secretLength % (k-1) != 0)
         return NULL; 
     
     // Initial set-up: reserve space for the shadows and shadow array
@@ -30,8 +30,7 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
         secret[i+1] = CONG(secret[i+1]) ? secret[i+1] : 1;
 
         Polynomial * fi = polyFromBytes(k, &secret[i]);
-
-        int ri = CONG(1 + rand() % (MOD-1));
+        int ri = 3; // CONG(1 + rand() % (MOD-1));
 
         uint8_t bi0 = CONG(-1*ri*secret[i]);
         uint8_t bi1 = CONG(-1*ri*secret[i+1]);
@@ -54,7 +53,6 @@ uint8_t ** generateShadows(uint8_t * secret, int secretLength, int k, int n) {
         polyFree(fi); 
         polyFree(gi); 
     }
-
     return shadows; 
 }
 
@@ -70,6 +68,7 @@ static int isCheating(int ai0, int ai1, int bi0, int bi1) {
 
 
 uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
+
     int secretLength = shadowLength*(k-1); 
     int blockSize = 2*k - 2;
     uint8_t * secret = (uint8_t *) malloc(sizeof(uint8_t)*secretLength); 
@@ -86,6 +85,7 @@ uint8_t * reconstruct(uint8_t ** shadows, int * ids, int shadowLength, int k) {
 
         Polynomial * fi = polyInterpolate(k, ids, ys1);
         Polynomial * gi = polyInterpolate(k, ids, ys2);
+
 
         int ai0 = fi->coefficients[0];
         int ai1 = fi->coefficients[1];

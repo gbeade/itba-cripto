@@ -18,7 +18,6 @@ void testShadowGeneration(CuTest *const cuTest) {
     int secretLength = sizeof(secret);
 
     int shadowSize = secretLength / (k-1); 
-    uint8_t originals[n][secretLength];
 
     int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
@@ -38,43 +37,6 @@ void testShadowGeneration(CuTest *const cuTest) {
     }
     free(shadows); 
     free(secretReconstructed); 
-}
-
-void testShadowGenerationMod2(CuTest *const cuTest) { // Should work but fails for some reason!
-
-
-    // Declare parameters of the schema
-    int n = 5;
-    int k = 4;
-
-
-    uint8_t secret[] = {"1", "2", "3", "4", "5", "6"}; // multiple of 2*k - 2 = 6
-
-    // Considers the NULL-terminated
-    int secretLength  = sizeof(secret);
-
-    int shadowSize = secretLength / (k-1);
-
-    uint8_t originals[n][secretLength];
-
-
-    int ids[3] = {1, 2, 3, 4};
-    uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
-
-    uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
-
-    CuAssertIntEquals(cuTest, secretReconstructed[1], "2");
-    CuAssertIntEquals(cuTest, secretReconstructed[2], "3");
-    CuAssertIntEquals(cuTest, secretReconstructed[3], "4");
-    CuAssertIntEquals(cuTest, secretReconstructed[4], "5");
-    CuAssertIntEquals(cuTest, secretReconstructed[5], "6");
-
-    for (int i=0; i<n; i++) {
-        free(shadows[i]);
-    }
-
-    free(shadows);
-    free(secretReconstructed);
 }
 
 void testShadowGenerationMod(CuTest *const cuTest) {
@@ -136,8 +98,6 @@ void verbose(CuTest *const cuTest) {
     int shadowSize = secretLength / (k-1); 
     uint8_t originals[n][secretLength];
 
-   
-
     int ids[3] = {1, 2, 3}; 
     uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
 
@@ -173,7 +133,39 @@ void verbose(CuTest *const cuTest) {
     free(secretReconstructed); 
 
 }
+   
+
+void testAllK(CuTest *const cuTest) { 
+
+    // Declare parameters of the schema
+    int n = 9;
+    uint8_t secret[840]; // LCM(2, 3, 4, 5, 6, 7) = 420 
+    int secretLength  = 840;
+    int ids[8] = {1, 2, 3, 4, 5, 6, 7, 8};
+
+    for (int i=0; i<840; i++) {
+        secret[i] = 100; 
+    }
+
+    for (int k=3; k<=8; k++) {
+
+        int shadowSize = secretLength / (k-1);
+
+        uint8_t ** shadows = generateShadows(secret, secretLength, k, n);
+
+        uint8_t * secretReconstructed = reconstruct(shadows, ids, shadowSize, k);
+
+        for (int i=0; i<420; i++) {
+            CuAssertIntEquals(cuTest, secretReconstructed[i], 100);
+        }
+
+        for (int i=0; i<n; i++) {
+            free(shadows[i]);
+        }
+
+        free(shadows);
+        free(secretReconstructed);
+    }
 
 
-
-    
+}

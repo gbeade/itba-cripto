@@ -167,6 +167,20 @@ static void testQuadraticInterpolation(CuTest *const cuTest, int s1, int s2, int
 }
 
 
+// f(x) = 1 + x + x2 + x3 
+static void testCubicInterpolation(CuTest *const cuTest) {
+    int xs[4] = {1, 2, 3, 4}; 
+    int ys[4] = {4, 15, 40, 85}; 
+    Polynomial * poly1 = polyInterpolate(4, xs, ys); 
+
+    CuAssertIntEquals(cuTest, poly1->coefficients[0], 1);
+    CuAssertIntEquals(cuTest, poly1->coefficients[1], 1);
+    CuAssertIntEquals(cuTest, poly1->coefficients[2], 1);
+    CuAssertIntEquals(cuTest, poly1->coefficients[3], 1);
+
+    polyFree(poly1); 
+}
+
 void testPolynomialInterpolation(CuTest *const cuTest) {
 
     /* Base case interpolation */
@@ -178,6 +192,8 @@ void testPolynomialInterpolation(CuTest *const cuTest) {
 
     /* We test for quadratic but they are colinear, expect s3=0 */
     testQuadraticInterpolation(cuTest, 0, 1, 0, 1, 2, 3, 1, 2, 3); 
+
+    testCubicInterpolation(cuTest); 
 
 }
 

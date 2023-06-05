@@ -148,7 +148,6 @@ void recover(char* shadowPath, char* imgPath, int k) {
 
     for (int i = 0; i < count; i++) {
         shadowImages[i] = mapToBmpImage(shadowMaps[i]);
-        debugBmp(shadowImages[i]);
     }
 
     /* Take the first of all pictures as template, they are the same size */
