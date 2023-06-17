@@ -91,6 +91,7 @@ uint8_t* reconstruct(uint8_t** shadows, int* ids, int shadowLength, int k) {
         if (isCheating(ai0, ai1, bi0, bi1)) {
             polyFree(fi);
             polyFree(gi);
+            free(secret);
             return NULL;
         }
 
