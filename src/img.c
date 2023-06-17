@@ -65,6 +65,9 @@ void distribute(char* shadowPath, char* imgPath, int k) {
 
     // /* Load BMP for main image */
     BMPMap* mainMap = newBmpMap(imgPath);
+    if(mainMap == NULL){
+        return;
+    }
     BMPImage* mainImage = mapToBmpImage(mainMap);
     int secretLength = mainImage->header->width * mainImage->header->height; // Might be cause of error
 
@@ -79,7 +82,11 @@ void distribute(char* shadowPath, char* imgPath, int k) {
     BMPMap* shadowMaps[MAX_SHADOWS];
     int count = mapAllBmps(shadowPath, shadowMaps);
 
-    if (count < k) {
+    if(count == -1){
+        freeBmpImage(mainImage);
+        freeBmpMap(mainMap);
+        return;
+    }else if (count < k) {
         fprintf(stderr, "Error: the number of images in directory has to be at least k\n");
         shadowMaps[count++] = mainMap;
         freeShadowImages(NULL, shadowMaps, count);
@@ -138,7 +145,9 @@ void recover(char* shadowPath, char* imgPath, int k) {
     BMPMap* shadowMaps[MAX_SHADOWS];
     int count = mapAllBmps(shadowPath, shadowMaps);
 
-    if (count < k) {
+    if(count == -1){
+        return;
+    }else if (count < k) {
         fprintf(stderr, "Error: the number of images in directory has to be at least k\n");
         freeShadowImages(NULL, shadowMaps, count);
         return;
