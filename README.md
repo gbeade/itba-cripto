@@ -8,7 +8,7 @@ El algoritmo de Imagen Secreta Compartida es un método de criptografía que per
 
 Este programa implementa el algoritmo descrito en el documento mencionado anteriormente, que utiliza un esquema (k,n) capaz de detectar intentos de fraude o manipulación. El programa permite generar sombras a partir de una imagen de entrada y recuperar la imagen original a partir de un conjunto de sombras proporcionado por los usuarios.
 
-# Instrucciones de uso
+## Instrucciones de uso
 
 Para compilar y ejecutar el programa:
 
@@ -25,15 +25,16 @@ Para compilar y ejecutar el programa:
    ## Ejemplo de uso
 
 - En caso de necesitar distribuir un secreto `secret.bmp` en un directorio `shares` con un `k` de 5, se podría correr:
-  ```
+  ```bash
   ./bin/main -d -i ./secret.bmp -o ./shares -k 5
   ```
-- En caso de necesitar recuperar un secreto a partir de un set de sombras almacenadas en el directorio `shares` y obtener el secreto en un archivo `secret.bmp` (nuevamente `k=5`), se podría correr:
+  > **_NOTA:_**  Las imagenes del directorio `shares` se modifican *in-place*.
+- En caso de necesitar recuperar el secreto distribuido anteriormente en `shares` y obtener el resultado en un archivo `secret.bmp`, se podría correr:
 
-  ```
+  ```bash
   ./bin/main -r -i ./shares -o ./result.bmp -k 5
   ```
 
-# Testing
+## Testing
 
 Para correr los tests, es suficiente con correr la regla `make test`. Esto compila los fuentes, la librería de testeo CuTest y corre todos los tests según lo establecido en `test/test.c`.
