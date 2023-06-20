@@ -161,7 +161,6 @@ void recover(char* shadowPath, char* imgPath, int k) {
 
     /* Take the first of all pictures as template, they are the same size */
     int secretLength = shadowImages[0]->header->width * shadowImages[0]->header->height; // Might be cause of error
-
     if (secretLength % (2 * k - 2) != 0) {
         fprintf(stderr, "Error: image length should be multiple of 2k-2\n");
         freeShadowImages(shadowImages, shadowMaps, count);
@@ -169,7 +168,7 @@ void recover(char* shadowPath, char* imgPath, int k) {
     }
 
     for (int i = 1; i < count; i++) {
-        int shadowSecretLength = shadowImages[i]->header->width * shadowImages[i]->header->width;
+        int shadowSecretLength = shadowImages[i]->header->width * shadowImages[i]->header->height;
         if (shadowSecretLength != secretLength) {
             fprintf(stderr, "Error: shadow images should be the same length\n");
             freeShadowImages(shadowImages, shadowMaps, count);
