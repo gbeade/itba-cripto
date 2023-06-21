@@ -28,7 +28,7 @@ Para compilar y ejecutar el programa:
   ```bash
   ./bin/main -d -i ./secret.bmp -o ./shares -k 5
   ```
-  > **_NOTA:_**  Las imagenes del directorio `shares` se modifican *in-place*.
+  > **_NOTA:_**  Las imagenes del directorio `shares` se modifican *in-place*, pisan el archivo original.
 - En caso de necesitar recuperar el secreto distribuido anteriormente en `shares` y obtener el resultado en un archivo `secret.bmp`, se podría correr:
 
   ```bash
